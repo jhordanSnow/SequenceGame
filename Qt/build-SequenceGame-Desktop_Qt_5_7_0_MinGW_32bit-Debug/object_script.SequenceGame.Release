@@ -1,0 +1,13 @@
+INPUT(
+./release\main.o
+./release\Game.o
+./release\BoardCard.o
+./release\Button.o
+./release\DeckCard.o
+./release\Player.o
+./release\CircleListPlayers.o
+./release\qrc_resources.o
+./release\moc_Game.o
+./release\moc_BoardCard.o
+./release\moc_Button.o
+);

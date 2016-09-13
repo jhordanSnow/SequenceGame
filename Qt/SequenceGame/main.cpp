@@ -4,6 +4,7 @@
 Game* sequence;
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
     // Creamos la instancia general del juego
     sequence = new Game();

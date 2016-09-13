@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-09-11T16:57:14
+# Project created by QtCreator 2016-09-12T19:53:37
 #
 #-------------------------------------------------
 
@@ -13,20 +13,22 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    Game.cpp \
     BoardCard.cpp \
     Button.cpp \
+    CircleListPlayers.cpp \
     DeckCard.cpp \
+    Game.cpp \
     Player.cpp \
-    CircleListPlayers.cpp
+    ArrayStackDeck.cpp
 
 HEADERS  += \
-    Game.h \
     BoardCard.h \
     Button.h \
+    CircleListPlayers.h \
     DeckCard.h \
+    Game.h \
     Player.h \
-    CircleListPlayers.h
+    ArrayStackDeck.h
 
 RESOURCES += \
     resources.qrc

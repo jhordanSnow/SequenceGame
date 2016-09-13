@@ -1,0 +1,13 @@
+INPUT(
+./debug\main.o
+./debug\Game.o
+./debug\BoardCard.o
+./debug\Button.o
+./debug\DeckCard.o
+./debug\Player.o
+./debug\CircleListPlayers.o
+./debug\qrc_resources.o
+./debug\moc_Game.o
+./debug\moc_BoardCard.o
+./debug\moc_Button.o
+);

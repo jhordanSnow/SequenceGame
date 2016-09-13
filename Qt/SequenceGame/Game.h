@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "CircleListPlayers.h"
+#include "ArrayStackDeck.h"
 #include "BoardCard.h"
 #include "DeckCard.h"
 #include "Button.h"
@@ -19,7 +20,6 @@ class Game: public QGraphicsView{
     Q_OBJECT
 public:
     Game();
-    void loadDeck(); // Cargamos el mazo
     void loadBoard(bool random = true); // Cargamos el tablero
     //tablero* tableroCartas; //Inicializa el tablero de las cartas
     //jugador* turno; // Dice el turno del que está jugando
@@ -27,7 +27,8 @@ public:
     QGraphicsScene *scene; // Escena del juego
 private:
     int numberPlayers; // Cantidad de jugadores
-    CircleListPlayers* players;
+    CircleListPlayers* players; // Lista de jugadores
+    ArrayStackDeck* deck;
 public slots:
     void mainMenu(); // Inicia el menú inicial del juego
     void startGame(); // Inicio del juego

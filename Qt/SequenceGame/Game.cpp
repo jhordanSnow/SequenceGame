@@ -5,6 +5,8 @@
 const QString PATH_TOKEN = ":/Tokens/Tokens/"; // Ruta de las cartas
 const QString EXT_TOKEN = ".png";
 
+QLineEdit* playerName;
+
 Game::Game(){
     /*
     ** Inicializamos la pantalla
@@ -23,10 +25,11 @@ Game::Game(){
     ** Inicializamos la lista de los jugadores
     */
     this->players = new CircleListPlayers(6);
-}
-
-void Game::loadDeck(){
-
+    /*
+    ** Inicializamos el deck y lo llenamos
+    */
+    deck = new ArrayStackDeck(104,52);
+    deck->fillDeck();
 }
 
 void Game::loadBoard(bool random){}
@@ -65,12 +68,21 @@ void Game::startGame(){
 
     setBackgroundBrush(QBrush(QImage(":/Images/Images/background.jpg"))); // Imagen de fondoe
 
-    loadBoard();
+    for (int i = 0; i < 12; i++){
+        qDebug() << players->getPlayer()->getName();
+        players->nextPlayer();
+    }
+    deck->shuffleDeck();
 
-    DeckCard* carta3 = new DeckCard(3, "pica", 230, 50);
-    setBackgroundBrush(Qt::red);
+    deck->toString();
+
+    DeckCard* carta2 = new DeckCard(1);
+    carta2->setPosition(530, 250);
+    scene->addItem(carta2);
+
+    BoardCard* carta3 = new BoardCard(2);
+    carta3->setPosition(230, 50);
     scene->addItem(carta3);
-
 }
 
 void Game::selectPlayer(){
@@ -142,7 +154,7 @@ void Game::getPlayer(int playerId){
         tituloJuego->setPos(550,310);
         scene->addItem(tituloJuego);
 
-        QLineEdit *playerName = new QLineEdit; // Creamo el objeto en donde se escribe el nombre del jugador
+        playerName = new QLineEdit; // Creamo el objeto en donde se escribe el nombre del jugador
         playerName->setGeometry(550,420,500,50); // Le damos la posición y el tamaño
         scene->addWidget(playerName); // Añadimos el input text a la escena
 
@@ -182,13 +194,13 @@ void Game::getPlayer(int playerId){
 }
 
 void Game::addPlayer(int playerId){
-    players->addPlayer(new Player("player "+QString::number(playerId),"asdasd"));
+    players->addPlayer(new Player(playerName->text()+QString::number(playerId),"asdasd"));
+    qDebug() << playerName->text();
     playerId++;
     if (playerId == numberPlayers){
         startGame();
     }else{
+        delete playerName;
         getPlayer(playerId);
     }
 }
-
-

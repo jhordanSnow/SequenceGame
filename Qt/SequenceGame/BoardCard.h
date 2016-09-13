@@ -8,7 +8,9 @@ class BoardCard: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     BoardCard();
-    BoardCard(int value, QString suit, int posX, int posY);
+    BoardCard(int value);
+    void setPosition(int posX, int posY);
+    int getValue();
     int getPosX(); // Traer la posición X de la carta
     int getPosY(); // Traer la posición Y de la carta
     void setSize(float largo); // Método para ajustar el tamaño de la carta con respecto al largo
@@ -18,7 +20,6 @@ public:
     virtual ~BoardCard(); // Destructor
 private:
     int value; // Valor de la carta
-    QString suit; // Tipo de la carta (Corazones, Pica, Trebol, Diamante)
     int posX; // Variable para saber la posición en X de la carta dentro de la pantalla
     int posY; // Variable para saber la posición en Y de la carta dentro de la pantalla
     int state; // Variable para identificar el estado de la carta

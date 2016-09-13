@@ -2,7 +2,7 @@
 
 DeckCard::DeckCard(){}
 
-DeckCard::DeckCard(int value, QString suit, int posX, int posY): BoardCard(value, suit, posX, posY){
+DeckCard::DeckCard(int value): BoardCard(value){
     this->setAcceptDrops(true); // Le damos el atributo al objeto de que permita Drops
 
     this->setFlag(QGraphicsItem::ItemIsSelectable); // Agregamos una box rara al redeador del item

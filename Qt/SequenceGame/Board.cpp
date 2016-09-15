@@ -86,7 +86,7 @@ int Board::getMatrizPosY(BoardCard* card){
     for (int i = 0 ; i < rows; i++){
         for (int j = 0; j < columns; j++){
             if (table[i][j] == card){
-                return i;
+                return j;
             }
         }
     }

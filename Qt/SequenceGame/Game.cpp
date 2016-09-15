@@ -4,7 +4,7 @@
 #define GAME_FONT_SIZE 30
 const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 
-#define WINNER_ROW 2
+#define WINNER_ROW 5
 
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 600
@@ -381,7 +381,7 @@ void Game::setSelectedCard(DeckCard* handCard){
 }
 
 void Game::checkCards(BoardCard *boardCard){
-    int handCardId = selectedHandCard->getValue();
+    int handCardId =  (selectedHandCard == NULL) ? NULL : selectedHandCard->getValue();
     if((boardCard->getValue() == handCardId || handCardId == ID_J_1 || handCardId == ID_J_2)
             && !boardCard->getHasOwner() && boardCard->getValue() > 0){
 
@@ -390,9 +390,11 @@ void Game::checkCards(BoardCard *boardCard){
         boardCard->setOwner(players->getPlayer());
         boardCard->reloadCard();
         scene->removeItem(selectedHandCard);
+        selectedHandCard = NULL;
         players->getPlayer()->drawCard(deck->popCard());
 
         round++;
+
         checkWinner(boardCard);
         //startRounds();
     }else if (handCardId == ID_JOKER_1 || handCardId == ID_JOKER_2){
@@ -400,6 +402,7 @@ void Game::checkCards(BoardCard *boardCard){
         boardCard->setOwner(NULL);
         boardCard->reloadCard();
         scene->removeItem(selectedHandCard);
+        selectedHandCard = NULL;
         players->getPlayer()->drawCard(deck->popCard());
 
         round++;
@@ -412,6 +415,39 @@ void Game::checkCards(BoardCard *boardCard){
 void Game::checkWinner(BoardCard* boardCard){
     int posMatrixX = tableBoard->getMatrizPosX(boardCard);
     int posMatrixY = tableBoard->getMatrizPosY(boardCard);
+    int matrixRows = tableBoard->getRows();
+    int matrixCols = tableBoard->getColumns();
+
+    int horizontalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 0,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 0,matrixRows, matrixCols, boardCard, 0);
+    int verticalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 0, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, 0, -1,matrixRows, matrixCols, boardCard, 0);
+    int diagonalDown = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, -1,matrixRows, matrixCols, boardCard, 0);
+    int diagonalUp = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, -1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 1,matrixRows, matrixCols, boardCard, 0);
+
+    /*qDebug() << "Horizontal = " << horizontalTokens;
+    qDebug() << "Vertical = " << verticalTokens;
+    qDebug() << "Diagonal creciente = " << diagonalUp;
+    qDebug() << "Diagonal decreciente = " << diagonalDown;
+    qDebug() << "-------------------------------------------------------------------------";*/
+
+}
+
+int Game::recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int cRows, int cCols, BoardCard* boardCard, int tokens){
+    int newPosX = posCardX + moveX;
+    int newPosY = posCardY + moveY;
+    if (newPosX < 0 || newPosX > (cRows - 1)){
+        return tokens;
+    }if (newPosY < 0 || newPosY > (cCols - 1)){
+        return tokens;
+    }
+    BoardCard* nextCard = tableBoard->getCard(newPosX, newPosY);
+    if (nextCard->getOwner() == boardCard->getOwner()){
+        return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens + 1);
+    }
+    if ((newPosX == 0 && newPosY == 0) || (newPosX == 9 && newPosY == 9) ||
+        (newPosX == 9 && newPosY == 0) || (newPosX == 0 && newPosY == 9)){
+        return tokens + 1;
+    }
+    return tokens;
 }
 
 void Game::reloadBoard(){

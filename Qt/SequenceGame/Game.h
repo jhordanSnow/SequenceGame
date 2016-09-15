@@ -31,6 +31,8 @@ public:
     void checkCards(BoardCard* boardCard);
     void checkWinner(BoardCard* boardCard);
 
+    int recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int cRows, int cCols, BoardCard* boardCard, int tokens);
+
     QGraphicsScene *scene; // Escena del juego
 private:
     int numberPlayers; // Cantidad de jugadores

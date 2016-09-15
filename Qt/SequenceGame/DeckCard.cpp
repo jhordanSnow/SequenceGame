@@ -1,4 +1,7 @@
 #include "DeckCard.h"
+#include "Game.h"
+
+extern Game* sequence;
 
 DeckCard::DeckCard(){}
 
@@ -25,7 +28,7 @@ void DeckCard::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
 }
 
 void DeckCard::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    qInfo("click event");
+    sequence->setSelectedCard(this);
 }
 
 void DeckCard::mouseMoveEvent(QGraphicsSceneMouseEvent *event){

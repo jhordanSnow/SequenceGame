@@ -1,9 +1,11 @@
 #ifndef BOARDCARD_H
 #define BOARDCARD_H
 
+
+
 #include <QBrush>
 #include <QGraphicsPixmapItem>
-
+class Player;
 class BoardCard: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
@@ -19,14 +21,26 @@ public:
     bool getScale(); // Obtenemos el parametro de si permitimos escalarlo o no
     void setScale(bool allowScale); // Seteamos la variable scale
 
+    Player* getOwner();
+    void setOwner(Player* owner);
+
+    void reloadCard();
+    void mousePressEvent(QGraphicsSceneMouseEvent *event); //  Método para tomar el evento de presionar
+
     virtual ~BoardCard(); // Destructor
+    bool getHasOwner();
+    void setHasOwner(bool value);
+
 private:
     int value; // Valor de la carta
     int posX; // Variable para saber la posición en X de la carta dentro de la pantalla
     int posY; // Variable para saber la posición en Y de la carta dentro de la pantalla
     int state; // Variable para identificar el estado de la carta
     bool allowScale = true; // Variable para verificar si la carta se puede escalar o no
+    bool allowRotate = true;
     bool board;
+    bool hasOwner;
+    Player* owner;
 };
 
 #endif // BOARDCARD_H

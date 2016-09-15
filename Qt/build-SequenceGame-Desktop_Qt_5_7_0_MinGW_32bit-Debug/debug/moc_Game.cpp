@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Game_t {
-    QByteArrayData data[17];
-    char stringdata0[161];
+    QByteArrayData data[16];
+    char stringdata0[155];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,15 +43,14 @@ QT_MOC_LITERAL(10, 90, 9), // "addPlayer"
 QT_MOC_LITERAL(11, 100, 10), // "changeName"
 QT_MOC_LITERAL(12, 111, 4), // "name"
 QT_MOC_LITERAL(13, 116, 11), // "startRounds"
-QT_MOC_LITERAL(14, 128, 5), // "round"
-QT_MOC_LITERAL(15, 134, 11), // "changeToken"
-QT_MOC_LITERAL(16, 146, 14) // "randomizeBoard"
+QT_MOC_LITERAL(14, 128, 11), // "changeToken"
+QT_MOC_LITERAL(15, 140, 14) // "randomizeBoard"
 
     },
     "Game\0mainMenu\0\0startGame\0selectPlayer\0"
     "createPlayer\0numberPlayers\0getPlayer\0"
     "playerId\0error\0addPlayer\0changeName\0"
-    "name\0startRounds\0round\0changeToken\0"
+    "name\0startRounds\0changeToken\0"
     "randomizeBoard"
 };
 #undef QT_MOC_LITERAL
@@ -78,9 +77,9 @@ static const uint qt_meta_data_Game[] = {
        7,    1,   80,    2, 0x2a /* Public | MethodCloned */,
       10,    1,   83,    2, 0x0a /* Public */,
       11,    1,   86,    2, 0x0a /* Public */,
-      13,    1,   89,    2, 0x0a /* Public */,
-      15,    0,   92,    2, 0x0a /* Public */,
-      16,    0,   93,    2, 0x0a /* Public */,
+      13,    0,   89,    2, 0x0a /* Public */,
+      14,    0,   90,    2, 0x0a /* Public */,
+      15,    0,   91,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
@@ -91,7 +90,7 @@ static const uint qt_meta_data_Game[] = {
     QMetaType::Void, QMetaType::Int,    8,
     QMetaType::Void, QMetaType::Int,    8,
     QMetaType::Void, QMetaType::QString,   12,
-    QMetaType::Void, QMetaType::Int,   14,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -112,7 +111,7 @@ void Game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
         case 5: _t->getPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 6: _t->addPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 7: _t->changeName((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 8: _t->startRounds((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->startRounds(); break;
         case 9: _t->changeToken(); break;
         case 10: _t->randomizeBoard(); break;
         default: ;

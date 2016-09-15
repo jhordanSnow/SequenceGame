@@ -9,7 +9,7 @@ public:
     void setMaxCards(int maxCards); // Seteamo el máximo permitido de cartas
     void appendCard(DeckCard* card); // Agregar una carta
     void swapCards(int cardPos1, int cardPos2); // Cambiar cartas de posiciones
-    DeckCard* removeCard(int cardPos); // Eliminar una carta
+    DeckCard* removeCard(DeckCard *card); // Eliminar una carta
 
 
     DeckCard* getCard(int cardPos);

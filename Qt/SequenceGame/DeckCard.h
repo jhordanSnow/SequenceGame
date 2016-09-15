@@ -15,7 +15,6 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event); //  Método para tomar el evento de presionar
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event); // Método para capturar el movimiento del mouse
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event); // Método para capturar cuando se suelta la carta
-private:
 };
 
 #endif // DECKCARD_H

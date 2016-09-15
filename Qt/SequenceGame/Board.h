@@ -13,6 +13,8 @@ public:
     void fillBoard(); // Llenamos el tablero con el patron usado en sequence
     void randomBoard();
     bool isCorner(BoardCard* card);
+    int getMatrizPosX(BoardCard* card);
+    int getMatrizPosY(BoardCard* card);
 
     void toString();
 private:

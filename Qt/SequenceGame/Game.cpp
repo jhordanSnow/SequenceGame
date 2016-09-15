@@ -4,6 +4,8 @@
 #define GAME_FONT_SIZE 30
 const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 
+#define WINNER_ROW 2
+
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 600
 #define MAX_PLAYERS 4
@@ -19,6 +21,12 @@ const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 #define BACK_POSY 538
 #define INITIAL_BOARD_POSX 450
 #define INITIAL_BOARD_POSY 10
+
+#define ID_J_1 49
+#define ID_J_2 51
+
+#define ID_JOKER_1 50
+#define ID_JOKER_2 52
 
 #define maxToken 4
 
@@ -49,6 +57,8 @@ Game::Game(){
     tableBoard = new Board(BOARD_ROWS,BOARD_COLUMNS);
     deck->fillDeck();
     tableBoard->fillBoard();
+
+    discardCards = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
 }
 
 void Game::loadBoard(int posX, int posY){
@@ -126,7 +136,7 @@ void Game::startGame(){
     }
 
     round = 0;
-    startRounds(round);
+    startRounds();
 
     /*for (int i = 0; i < players->getCurrentSize(); i++){
         Player* currentPlayer = players->getPlayer();
@@ -292,25 +302,21 @@ void Game::changeName(QString name){
     playerName = name;
 }
 
-void Game::startRounds(int round){
+void Game::startRounds(){
     if (round > 0){
         cleanRound(players->getPlayer());
         players->nextPlayer();
     }
 
     Player* currentPlayer = players->getPlayer();
-
     showRound(currentPlayer);
 
     Button* next = new Button(QString("next"));
     next->setPos(1050,538);
+    connect (next, SIGNAL(clicked()), this, SLOT(startRounds()));
 
     round++;
 
-    QSignalMapper* signalMapper = new QSignalMapper(this);
-    connect (next, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    signalMapper -> setMapping (next,round);
-    connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(startRounds(int)));
 
     scene->addItem(next);
 }
@@ -368,6 +374,44 @@ bool Game::tokenTaken(int idToken){
 void Game::randomizeBoard(){
     tableBoard->randomBoard();
     reloadBoard();
+}
+
+void Game::setSelectedCard(DeckCard* handCard){
+    this->selectedHandCard = handCard;
+}
+
+void Game::checkCards(BoardCard *boardCard){
+    int handCardId = selectedHandCard->getValue();
+    if((boardCard->getValue() == handCardId || handCardId == ID_J_1 || handCardId == ID_J_2)
+            && !boardCard->getHasOwner() && boardCard->getValue() > 0){
+
+        discardCards->pushCard(selectedHandCard);
+        players->getPlayer()->getHand()->removeCard(selectedHandCard);
+        boardCard->setOwner(players->getPlayer());
+        boardCard->reloadCard();
+        scene->removeItem(selectedHandCard);
+        players->getPlayer()->drawCard(deck->popCard());
+
+        round++;
+        checkWinner(boardCard);
+        //startRounds();
+    }else if (handCardId == ID_JOKER_1 || handCardId == ID_JOKER_2){
+
+        boardCard->setOwner(NULL);
+        boardCard->reloadCard();
+        scene->removeItem(selectedHandCard);
+        players->getPlayer()->drawCard(deck->popCard());
+
+        round++;
+        //startRounds();
+    }else{
+        qDebug() << "Nop nigga";
+    }
+}
+
+void Game::checkWinner(BoardCard* boardCard){
+    int posMatrixX = tableBoard->getMatrizPosX(boardCard);
+    int posMatrixY = tableBoard->getMatrizPosY(boardCard);
 }
 
 void Game::reloadBoard(){

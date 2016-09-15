@@ -30,10 +30,15 @@ void ArrayCard::swapCards(int cardPos1, int cardPos2){
     cards[cardPos2] = tempCard;
 }
 
-DeckCard *ArrayCard::removeCard(int cardPos){
-    if (cardPos < 0 || cardPos > currentCardSize){
-        throw runtime_error("Card not found.");
+DeckCard *ArrayCard::removeCard(DeckCard* card){
+    int cardPos;
+    for (int i = 0; i < currentCardSize; i++){
+        if (card == cards[i]){
+           cardPos = i;
+           break;
+        }
     }
+
     int lastPos = currentCardSize - 1;
     if (cardPos != lastPos){
         swapCards(cardPos,lastPos);

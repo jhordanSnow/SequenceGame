@@ -72,6 +72,28 @@ bool Board::isCorner(BoardCard *card){
     return (card->getValue() == 0);
 }
 
+int Board::getMatrizPosX(BoardCard* card){
+    for (int i = 0 ; i < rows; i++){
+        for (int j = 0; j < columns; j++){
+            if (table[i][j] == card){
+                return i;
+            }
+        }
+    }
+}
+
+int Board::getMatrizPosY(BoardCard* card){
+    for (int i = 0 ; i < rows; i++){
+        for (int j = 0; j < columns; j++){
+            if (table[i][j] == card){
+                return i;
+            }
+        }
+    }
+}
+
+
+
 void Board::fillBoard(){
     table[0][0] = new BoardCard(0); // Comodin
     table[0][1] = new BoardCard(2); // A diamantes

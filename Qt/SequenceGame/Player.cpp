@@ -1,22 +1,31 @@
 #include "Player.h"
 
-Player::Player(QString name, QString urlToken){
+Player::Player(QString name, Token *playerToken){
     this->name = name;
-    this->urlToken = urlToken;
+    this->playerToken = playerToken;
+    hand = new ArrayCard(10,7);
 }
 
 QString Player::getName(){
     return name;
 }
 
-QString Player::getToken(){
-    return urlToken;
-}
-
 void Player::setName(QString name){
     this->name = name;
 }
 
-void Player::setToken(QString urlToken){
-    this->urlToken = urlToken;
+ArrayCard *Player::getHand(){
+    return hand;
+}
+
+void Player::drawCard(DeckCard *card){
+    hand->appendCard(card);
+}
+
+Token* Player::getPlayerToken(){
+    return playerToken;
+}
+
+void Player::setPlayerToken(Token* value){
+    playerToken = value;
 }

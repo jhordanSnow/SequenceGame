@@ -7,8 +7,12 @@ INPUT(
 ./debug\Game.o
 ./debug\Player.o
 ./debug\ArrayStackDeck.o
+./debug\ArrayCard.o
+./debug\Board.o
+./debug\Token.o
 ./debug\qrc_resources.o
 ./debug\moc_BoardCard.o
 ./debug\moc_Button.o
 ./debug\moc_Game.o
+./debug\moc_Token.o
 );

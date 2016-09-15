@@ -1,38 +1,67 @@
 #include "Game.h"
-
 #include <QDebug>
 
-const QString PATH_TOKEN = ":/Tokens/Tokens/"; // Ruta de las cartas
-const QString EXT_TOKEN = ".png";
+#define GAME_FONT_SIZE 30
+const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 
-QLineEdit* playerName;
+#define WINDOW_WIDTH 1200
+#define WINDOW_HEIGHT 600
+#define MAX_PLAYERS 4
+#define MAX_DECK_CARDS 52
+#define MAX_DECKS 2
+#define BOARD_ROWS 10
+#define BOARD_COLUMNS 10
+#define BOARD_CARD_WIDTH 42
+#define BOARD_CARD_HEIGHT 60
+#define DECK_CARD_WIDTH 70
+#define MARGIN_CARDS 5
+#define BACK_POSX 5
+#define BACK_POSY 538
+#define INITIAL_BOARD_POSX 450
+#define INITIAL_BOARD_POSY 10
+
+#define maxToken 4
 
 Game::Game(){
+    tokenId = 1;
     /*
     ** Inicializamos la pantalla
     */
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Eliminamos la barra horizontal
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Eliminamos la barra vertical
-    setFixedSize(1200,600); // Le damos un tamaño fijo
+    setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT); // Le damos un tamaño fijo
     /*
     ** Inicializamos la escena
     */
     this->scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,1200,600); // Tamaño de la escena
+    scene->setSceneRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT); // Tamaño de la escena
     setScene(this->scene); // Añadimos la escena
 
     /*
     ** Inicializamos la lista de los jugadores
     */
-    this->players = new CircleListPlayers(6);
+    this->players = new CircleListPlayers(MAX_PLAYERS);
     /*
-    ** Inicializamos el deck y lo llenamos
+    ** Inicializamos el mazo y lo llenamos con cartas ordenadas
+    ** Inicializamos el tablero y lo llenamos
     */
-    deck = new ArrayStackDeck(104,52);
+    deck = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
+    tableBoard = new Board(BOARD_ROWS,BOARD_COLUMNS);
     deck->fillDeck();
+    tableBoard->fillBoard();
 }
 
-void Game::loadBoard(bool random){}
+void Game::loadBoard(int posX, int posY){
+    for (int i = 0 ; i < tableBoard->getRows(); i++){
+        for (int j = 0; j < tableBoard->getColumns(); j++){
+            BoardCard* cardAux = tableBoard->getCard(i,j);
+            int positionCardX = posX + ((BOARD_CARD_HEIGHT + MARGIN_CARDS) * i);
+            int positionCardY = posY + ((BOARD_CARD_WIDTH + MARGIN_CARDS) * j);
+            cardAux->setPos(positionCardX, positionCardY);
+            scene->addItem(cardAux);
+        }
+    }
+}
 
 void Game::mainMenu(){
     scene->clear();
@@ -41,17 +70,15 @@ void Game::mainMenu(){
     /*
     ** Creamos el botón de inicio
     */
-    Button* select = new Button(QString("start"));
+    Button* startButton = new Button(QString("start"));
     // Posicionamos el botón en el centro de la pantalla
-    int bxPos = this->width()/2 - select->boundingRect().width()/2;
-    int byPos = 280;
-    select->setPos(bxPos,byPos);
+    startButton->setPosition(WINDOW_WIDTH/2 - startButton->boundingRect().width()/2, WINDOW_HEIGHT/2 - startButton->boundingRect().height()/5);
     // Conectamos el botón con la pantalla de selección de jugadores
-    connect(select, SIGNAL(clicked()), this, SLOT(selectPlayer())); //cambiar a la seleccion de los jugadores
-    scene->addItem(select);
+    connect(startButton, SIGNAL(clicked()), this, SLOT(selectPlayer()));
+    scene->addItem(startButton);
 
     /*
-    ** Creamos el botón de salir
+    ** Creamos el botón de salir (pendiente)
     */
     Button* salir = new Button(QString("Salir"));
     // Posicionamos el botón en el centro de la pantalla
@@ -64,36 +91,63 @@ void Game::mainMenu(){
 }
 
 void Game::startGame(){
-    scene->clear();
-
+    scene->clear(); // Resetamos la escena
     setBackgroundBrush(QBrush(QImage(":/Images/Images/background.jpg"))); // Imagen de fondoe
+    // Posicionamos el el tablero
 
-    for (int i = 0; i < 12; i++){
-        qDebug() << players->getPlayer()->getName();
+    loadBoard(INITIAL_BOARD_POSX,INITIAL_BOARD_POSY);
+
+    deck->shuffleDeck(); // Revolvemos el mazo
+    /*
+    ** Creamos la imagen del mazo
+    */
+    BoardCard* deckImage = new BoardCard(-1,false);
+    deckImage->setPosition(20, 350);
+    deckImage->setScale(false);
+    scene->addItem(deckImage);
+
+    Button* randomizeBoard = new Button("back");
+    randomizeBoard->setPos(40, 420);
+    scene->addItem(randomizeBoard);
+    connect (randomizeBoard, SIGNAL(clicked()), this, SLOT(randomizeBoard()));
+
+    /*
+    ** Cargamos las manos de cada jugador
+    */
+    int maxHandCards = (this->numberPlayers == 4) ? 6 : 7;
+    players->goToStart();
+
+    for (int i = 0; i < players->getCurrentSize(); i++){
+        Player* currentPlayer = players->getPlayer();
+        for (int j = 0; j < maxHandCards; j++){
+            currentPlayer->drawCard(deck->popCard());
+        }
         players->nextPlayer();
     }
-    deck->shuffleDeck();
 
-    deck->toString();
+    round = 0;
+    startRounds(round);
 
-    DeckCard* carta2 = new DeckCard(1);
-    carta2->setPosition(530, 250);
-    scene->addItem(carta2);
+    /*for (int i = 0; i < players->getCurrentSize(); i++){
+        Player* currentPlayer = players->getPlayer();
+        qDebug() << currentPlayer->getName();
+        qDebug() << "------------------------------";
+        currentPlayer->getHand()->toString();
+        qDebug() << deck->getCurrentSize();
+        players->nextPlayer();
+    }*/
 
-    BoardCard* carta3 = new BoardCard(2);
-    carta3->setPosition(230, 50);
-    scene->addItem(carta3);
 }
 
 void Game::selectPlayer(){
-    scene->clear();
+    scene->clear(); // Resetamos la escena
     setBackgroundBrush(QBrush(QImage(":/Images/Images/select_player.jpg"))); // Imagen de fondo
 
     /*
     ** Botón de volver al inicio del juego
     */
     Button* back = new Button(QString("back"));
-    back->setPos(5,538);
+    back->setPos(BACK_POSX,BACK_POSY);
     connect(back, SIGNAL(clicked()), this, SLOT(mainMenu()));
     scene->addItem(back);
 
@@ -101,21 +155,21 @@ void Game::selectPlayer(){
     ** Creamos el botón para la selección de 2 jugadores
     */
     Button* twoPlayers = new Button(QString("2_players"));
-    twoPlayers->setPos(570,40);
+    twoPlayers->setPos(WINDOW_WIDTH/2 - twoPlayers->pixmap().width()/5, twoPlayers->pixmap().height()/4);
     scene->addItem(twoPlayers);
 
     /*
     ** Creamos el botón para la selección de 3 jugadores
     */
     Button* threePlayers = new Button(QString("3_players"));
-    threePlayers->setPos(290,220);
+    threePlayers->setPos(WINDOW_WIDTH/4,WINDOW_HEIGHT/2 - twoPlayers->pixmap().height()/2.5);
     scene->addItem(threePlayers);
 
     /*
     ** Creamos el botón para la selección de 4 jugadores
     */
     Button* fourPlayers = new Button(QString("4_players"));
-    fourPlayers->setPos(570,280);
+    fourPlayers->setPos(WINDOW_WIDTH/2 - twoPlayers->pixmap().width()/5,WINDOW_HEIGHT/2 - twoPlayers->pixmap().height()/4);
     scene->addItem(fourPlayers);
 
     /*
@@ -139,24 +193,40 @@ void Game::selectPlayer(){
 }
 
 void Game::createPlayer(int numberPlayers){
+    /*
+    ** Avanzamos a la creación del primero personaje
+    */
     this->numberPlayers = numberPlayers;
     getPlayer(0);
 }
 
-void Game::getPlayer(int playerId){
+void Game::getPlayer(int playerId, bool error){
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/Images/Images/background.jpg"))); // Imagen de fondo
 
     if (playerId < numberPlayers){
-        QGraphicsTextItem* tituloJuego = new QGraphicsTextItem(QString("Player ") + QString::number(playerId + 1)); // Creamos el label del jugador
-        QFont fuenteTitulo("comic sans",30); // Elejimos la fuente y el tamaño
-        tituloJuego->setFont(fuenteTitulo); // Seteamos el estilo del titulo
-        tituloJuego->setPos(550,310);
-        scene->addItem(tituloJuego);
+        QGraphicsTextItem* playerLabel = new QGraphicsTextItem(QString("Player ") + QString::number(playerId + 1)); // Creamos el label del jugador
+        playerLabel->setFont(gameFont); // Seteamos el estilo del titulo
+        playerLabel->setPos(550,310);
+        scene->addItem(playerLabel);
 
-        playerName = new QLineEdit; // Creamo el objeto en donde se escribe el nombre del jugador
-        playerName->setGeometry(550,420,500,50); // Le damos la posición y el tamaño
-        scene->addWidget(playerName); // Añadimos el input text a la escena
+        /*
+        ** Elección del token del jugador
+        */
+        playerToken = new Token(tokenId);
+        playerToken->setPos(40, 150);
+        scene->addItem(playerToken);
+
+        connect (playerToken, SIGNAL(clicked()), this, SLOT(changeToken()));
+
+        QLineEdit* playerInputName = new QLineEdit; // Creamo el objeto en donde se escribe el nombre del jugador
+        playerInputName->setFont(gameFont);
+        QString placeHolderMsg = (error) ? "Name can't be null" : "Write the name of player " + QString::number(playerId + 1) + ".";
+        playerInputName->setPlaceholderText(placeHolderMsg);
+        playerInputName->setGeometry(550,420,510,65); // Le damos la posición y el tamaño
+        scene->addWidget(playerInputName); // Añadimos el input text a la escena
+
+        connect(playerInputName, SIGNAL(textChanged(QString)), this, SLOT(changeName(QString)));
 
         QSignalMapper* signalMapper = new QSignalMapper(this);
 
@@ -168,6 +238,11 @@ void Game::getPlayer(int playerId){
         int previousPlayer = playerId - 1;
 
 
+        /*
+        ** Si el id del jugador es 0, el botón de atras
+        ** va a a ir al menú de seleccion de cantidad de jugadores
+        ** de lo contrario va a la configuración del jugador anterior
+        */
         if (playerId == 0) {
             connect(back, SIGNAL(clicked()), this, SLOT(selectPlayer()));
         }else{
@@ -180,27 +255,130 @@ void Game::getPlayer(int playerId){
         scene->addItem(back);
 
         /*
-        ** Botón del next
+        ** Botón al siguiente jugador, donde guarda la información de este
         */
         Button* next = new Button(QString("next"));
         next->setPos(1050,538);
-
-        connect (next, SIGNAL(clicked()), signalMapper, SLOT(map())) ;
-        signalMapper -> setMapping (next, playerId) ;
-        connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(addPlayer(int))) ;
-
         scene->addItem(next);
+        connect (next, SIGNAL(clicked()), signalMapper, SLOT(map()));
+        signalMapper -> setMapping (next, playerId);
+        connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(addPlayer(int)));
     }
 }
 
 void Game::addPlayer(int playerId){
-    players->addPlayer(new Player(playerName->text()+QString::number(playerId),"asdasd"));
-    qDebug() << playerName->text();
+    // Agregamos el jugador a la lista de jugadore
+    if (playerName == ""){
+        getPlayer(playerId, true);
+        return;
+    }
+    players->addPlayer(new Player(playerName, new Token(tokenId)));
+    playerName = "";
+    tokenId = (tokenId % maxToken) + 1;
     playerId++;
+    /*
+    ** Si el jugador siguiente es igual a la cantidad máxima de jugadores
+    ** vamos a la ventana inicial del juego, de lo contrario lo llevamos
+    ** a la creación del siguiente jugador
+    */
     if (playerId == numberPlayers){
         startGame();
     }else{
-        delete playerName;
         getPlayer(playerId);
+    }
+}
+
+void Game::changeName(QString name){
+    playerName = name;
+}
+
+void Game::startRounds(int round){
+    if (round > 0){
+        cleanRound(players->getPlayer());
+        players->nextPlayer();
+    }
+
+    Player* currentPlayer = players->getPlayer();
+
+    showRound(currentPlayer);
+
+    Button* next = new Button(QString("next"));
+    next->setPos(1050,538);
+
+    round++;
+
+    QSignalMapper* signalMapper = new QSignalMapper(this);
+    connect (next, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    signalMapper -> setMapping (next,round);
+    connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(startRounds(int)));
+
+    scene->addItem(next);
+}
+
+void Game::cleanRound(Player* player){
+    scene->removeItem(playerToken);
+    scene->removeItem(playerNameLabel);
+    ArrayCard* currentHand = player->getHand();
+    for (int i = 0; i < currentHand->getCurrentCardSize(); i++){
+        scene->removeItem(currentHand->getCard(i));
+    }
+}
+
+void Game::showRound(Player* player){
+    playerToken = player->getPlayerToken();
+    playerToken->setPos(40,120);
+    scene->addItem(playerToken);
+    //qDebug() << tokenTemp->getTokenId();
+
+    playerNameLabel = new QGraphicsTextItem(player->getName()); // Creamos el label del jugador
+    playerNameLabel->setFont(gameFont); // Seteamos el estilo del titulo
+    playerNameLabel->setPos(30,50);
+    scene->addItem(playerNameLabel);
+
+    /*Token* tokenTemp = player->getPlayerToken();
+    tokenTemp->setPos(45,80);
+    scene->addItem(tokenTemp);*/
+
+    ArrayCard* currentHand = player->getHand();
+    int initialPosHand = INITIAL_BOARD_POSX;
+    for (int i = 0; i < currentHand->getCurrentCardSize(); i++){
+        DeckCard* handCard = currentHand->getCard(i);
+        handCard->setPosition(initialPosHand+(i*DECK_CARD_WIDTH), WINDOW_HEIGHT - handCard->pixmap().height()/2);
+        scene->addItem(handCard);
+    }
+}
+
+void Game::changeToken(){
+    tokenId = (playerToken->getTokenId() % maxToken) + 1;
+    while (tokenTaken(tokenId)){
+        tokenId = (tokenId % maxToken) + 1;
+    }
+    playerToken->changeToken(tokenId);
+}
+
+bool Game::tokenTaken(int idToken){
+    for (int i = 0; i < players->getCurrentSize(); i++){
+        if (players->getPlayerById(i)->getPlayerToken()->getTokenId() == idToken){
+            return true;
+        }
+    }
+    return false;
+}
+
+void Game::randomizeBoard(){
+    tableBoard->randomBoard();
+    reloadBoard();
+}
+
+void Game::reloadBoard(){
+    for (int i = 0 ; i < tableBoard->getRows(); i++){
+        for (int j = 0; j < tableBoard->getColumns(); j++){
+            scene->removeItem(tableBoard->getCard(i,j));
+            BoardCard* cardAux = tableBoard->getCard(i,j);
+            int positionCardX = INITIAL_BOARD_POSX + ((BOARD_CARD_HEIGHT + MARGIN_CARDS) * i);
+            int positionCardY = INITIAL_BOARD_POSY + ((BOARD_CARD_WIDTH + MARGIN_CARDS) * j);
+            cardAux->setPos(positionCardX, positionCardY);
+            scene->addItem(cardAux);
+        }
     }
 }

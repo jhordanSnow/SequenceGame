@@ -30,3 +30,10 @@ void Button::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
     setPixmap(urlImage); // Url del botón cuando el mouse sale de la imagen
 }
 
+void Button::setPosition(int posX, int posY){
+    QGraphicsRectItem* around = new QGraphicsRectItem();
+    around->setRect(posX,posY,this->pixmap().width(), this->pixmap().height());
+    sequence->scene->addItem(around);
+    setPos(posX,posY);
+}
+

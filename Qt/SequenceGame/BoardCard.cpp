@@ -1,8 +1,8 @@
 #include "BoardCard.h"
 #include "Game.h"
 
-#define DEFAULT_SIZE 80
-#define DEFAULT_ZOOM 120
+#define DEFAULT_SIZE 60
+#define DEFAULT_ZOOM 150
 
 using namespace std;
 
@@ -13,7 +13,7 @@ extern Game* sequence; // Llamamos a la variable global que controla al juego
 
 BoardCard::BoardCard(){}
 
-BoardCard::BoardCard(int value){
+BoardCard::BoardCard(int value, bool rotate, bool board){
     /*
     ** Setea la ruta de la imagen deacuerdo al valor y el tipo de esta
     ** y se la agraga al objeto
@@ -24,17 +24,21 @@ BoardCard::BoardCard(int value){
     /*
     ** Rotamos la imagen para que sea horizontal
     */
-    setTransformOriginPoint(DEFAULT_SIZE/4,DEFAULT_SIZE/2);
-    setRotation(90);
+    if (rotate){
+        setTransformOriginPoint(DEFAULT_SIZE/4,DEFAULT_SIZE/2);
+        setRotation(270);
+    }
     /*
     ** Seteamos los valores iniciales de la carta
     */
     this->value = value;
+    this->board = board;
 
     setAcceptHoverEvents(true); // Hacemos que el objeto permita eventos de mouseHover
     setFlag(QGraphicsItem::ItemIsFocusable); // Permitimos que el objeto tenga foco dentro de la escena
-
-    setSize(DEFAULT_SIZE);
+    if (this->allowScale && value >= 0 && this->board){
+        setSize(DEFAULT_SIZE);
+    }
 }
 
 void BoardCard::setPosition(int posX, int posY){
@@ -60,14 +64,30 @@ void BoardCard::setSize(float largo){
 }
 
 void BoardCard::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
-    setSize(DEFAULT_ZOOM);
+    if (this->allowScale && value >= 0 && this->board){
+        setZValue(1);
+        setRotation(0);
+        setSize(DEFAULT_ZOOM);
+    }
 }
 
 
 void BoardCard::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
-    setSize(DEFAULT_SIZE);
+    if (this->allowScale && value >= 0 && this->board){
+        setZValue(0);
+        setRotation(270);
+        setSize(DEFAULT_SIZE);
+    }
 }
 
 BoardCard::~BoardCard(){
 
+}
+
+bool BoardCard::getScale(){
+    return allowScale;
+}
+
+void BoardCard::setScale(bool allowScale){
+    this->allowScale = allowScale;
 }

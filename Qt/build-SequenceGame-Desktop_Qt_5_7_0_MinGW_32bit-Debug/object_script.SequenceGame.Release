@@ -7,8 +7,12 @@ INPUT(
 ./release\Game.o
 ./release\Player.o
 ./release\ArrayStackDeck.o
+./release\ArrayCard.o
+./release\Board.o
+./release\Token.o
 ./release\qrc_resources.o
 ./release\moc_BoardCard.o
 ./release\moc_Button.o
 ./release\moc_Game.o
+./release\moc_Token.o
 );

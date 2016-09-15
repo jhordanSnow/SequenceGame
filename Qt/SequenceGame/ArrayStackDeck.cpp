@@ -16,7 +16,7 @@ ArrayStackDeck::ArrayStackDeck(int maxSize, int maxCards){
 }
 
 void ArrayStackDeck::pushCard(DeckCard *card){
-    if (currentSize > maxSize){
+    if (currentSize == maxSize){
         throw runtime_error("Full Deck");
     }
     cards[currentSize] = card;
@@ -54,7 +54,11 @@ DeckCard *ArrayStackDeck::popCard(){
 }
 
 void ArrayStackDeck::toString(){
-    for (int i = 0; i < maxSize; i++){
+    for (int i = 0; i < currentSize; i++){
         qDebug() << cards[i]->getValue();
     }
+}
+
+int ArrayStackDeck::getCurrentSize(){
+    return currentSize;
 }

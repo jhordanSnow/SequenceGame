@@ -52,6 +52,8 @@
         <file>Cards/50.png</file>
         <file>Cards/51.png</file>
         <file>Cards/52.png</file>
+        <file>Cards/0.png</file>
+        <file>Cards/-1.png</file>
     </qresource>
     <qresource prefix="/Buttons">
         <file>Buttons/start.png</file>

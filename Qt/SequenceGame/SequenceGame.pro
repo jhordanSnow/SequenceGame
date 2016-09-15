@@ -19,7 +19,10 @@ SOURCES += main.cpp \
     DeckCard.cpp \
     Game.cpp \
     Player.cpp \
-    ArrayStackDeck.cpp
+    ArrayStackDeck.cpp \
+    ArrayCard.cpp \
+    Board.cpp \
+    Token.cpp
 
 HEADERS  += \
     BoardCard.h \
@@ -28,7 +31,10 @@ HEADERS  += \
     DeckCard.h \
     Game.h \
     Player.h \
-    ArrayStackDeck.h
+    ArrayStackDeck.h \
+    ArrayCard.h \
+    Board.h \
+    Token.h
 
 RESOURCES += \
     resources.qrc

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Game_t {
-    QByteArrayData data[10];
-    char stringdata0[94];
+    QByteArrayData data[17];
+    char stringdata0[161];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,21 @@ QT_MOC_LITERAL(5, 38, 12), // "createPlayer"
 QT_MOC_LITERAL(6, 51, 13), // "numberPlayers"
 QT_MOC_LITERAL(7, 65, 9), // "getPlayer"
 QT_MOC_LITERAL(8, 75, 8), // "playerId"
-QT_MOC_LITERAL(9, 84, 9) // "addPlayer"
+QT_MOC_LITERAL(9, 84, 5), // "error"
+QT_MOC_LITERAL(10, 90, 9), // "addPlayer"
+QT_MOC_LITERAL(11, 100, 10), // "changeName"
+QT_MOC_LITERAL(12, 111, 4), // "name"
+QT_MOC_LITERAL(13, 116, 11), // "startRounds"
+QT_MOC_LITERAL(14, 128, 5), // "round"
+QT_MOC_LITERAL(15, 134, 11), // "changeToken"
+QT_MOC_LITERAL(16, 146, 14) // "randomizeBoard"
 
     },
     "Game\0mainMenu\0\0startGame\0selectPlayer\0"
     "createPlayer\0numberPlayers\0getPlayer\0"
-    "playerId\0addPlayer"
+    "playerId\0error\0addPlayer\0changeName\0"
+    "name\0startRounds\0round\0changeToken\0"
+    "randomizeBoard"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,7 +62,7 @@ static const uint qt_meta_data_Game[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,20 +70,30 @@ static const uint qt_meta_data_Game[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   44,    2, 0x0a /* Public */,
-       3,    0,   45,    2, 0x0a /* Public */,
-       4,    0,   46,    2, 0x0a /* Public */,
-       5,    1,   47,    2, 0x0a /* Public */,
-       7,    1,   50,    2, 0x0a /* Public */,
-       9,    1,   53,    2, 0x0a /* Public */,
+       1,    0,   69,    2, 0x0a /* Public */,
+       3,    0,   70,    2, 0x0a /* Public */,
+       4,    0,   71,    2, 0x0a /* Public */,
+       5,    1,   72,    2, 0x0a /* Public */,
+       7,    2,   75,    2, 0x0a /* Public */,
+       7,    1,   80,    2, 0x2a /* Public | MethodCloned */,
+      10,    1,   83,    2, 0x0a /* Public */,
+      11,    1,   86,    2, 0x0a /* Public */,
+      13,    1,   89,    2, 0x0a /* Public */,
+      15,    0,   92,    2, 0x0a /* Public */,
+      16,    0,   93,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    6,
+    QMetaType::Void, QMetaType::Int, QMetaType::Bool,    8,    9,
     QMetaType::Void, QMetaType::Int,    8,
     QMetaType::Void, QMetaType::Int,    8,
+    QMetaType::Void, QMetaType::QString,   12,
+    QMetaType::Void, QMetaType::Int,   14,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -89,8 +108,13 @@ void Game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
         case 1: _t->startGame(); break;
         case 2: _t->selectPlayer(); break;
         case 3: _t->createPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->getPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: _t->addPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 4: _t->getPlayer((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 5: _t->getPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->addPlayer((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->changeName((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 8: _t->startRounds((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 9: _t->changeToken(); break;
+        case 10: _t->randomizeBoard(); break;
         default: ;
         }
     }
@@ -121,13 +145,13 @@ int Game::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 11)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 11;
     }
     return _id;
 }

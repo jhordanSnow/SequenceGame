@@ -31,9 +31,25 @@ void CircleListPlayers::goToStart(){
     this->currentPlayer = 0;
 }
 
+Player *CircleListPlayers::getPlayerById(int playerId){
+    if (playerId < 0 || playerId > currentSize){
+        throw runtime_error("Player ID not found.");
+    }
+    return players[playerId];
+}
+
+
 Player *CircleListPlayers::getPlayer(){
     if (currentPlayer < 0 || currentPlayer > currentSize){
         throw runtime_error("Player ID not found.");
     }
     return players[currentPlayer];
+}
+
+int CircleListPlayers::getCurrentSize(){
+    return currentSize;
+}
+
+void CircleListPlayers::setCurrentSize(int currentSize){
+    this->currentSize = currentSize;
 }

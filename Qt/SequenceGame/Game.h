@@ -3,6 +3,7 @@
 
 #include "CircleListPlayers.h"
 #include "ArrayStackDeck.h"
+#include "UndoStack.h"
 #include "BoardCard.h"
 #include "DeckCard.h"
 #include "Button.h"
@@ -10,6 +11,7 @@
 #include "Token.h"
 #include "Board.h"
 
+#include <QMouseEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
@@ -30,10 +32,16 @@ public:
     void setSelectedCard(DeckCard *handCard);
     void checkCards(BoardCard* boardCard);
     void checkWinner(BoardCard* boardCard);
+    void changeDiscardImage(BoardCard* boardCard);
 
     int recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int cRows, int cCols, BoardCard* boardCard, int tokens);
 
     QGraphicsScene *scene; // Escena del juego
+
+    void mouseMoveEvent(QMouseEvent* event);
+
+    void mousePressEvent(QMouseEvent* event);
+
 private:
     int numberPlayers; // Cantidad de jugadores
     CircleListPlayers* players; // Lista de jugadores
@@ -46,6 +54,7 @@ private:
     QString playerName;
     int tokenId;
     DeckCard* selectedHandCard;
+    UndoStack* undoPile;
 public slots:
     void mainMenu(); // Inicia el menú inicial del juego
     void startGame(); // Inicio del juego

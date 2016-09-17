@@ -71,10 +71,12 @@ void BoardCard::setSize(float largo){
 }
 
 void BoardCard::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
-    if (this->allowScale && value >= 0 && this->board){
-        setZValue(1);
+    if (this->allowScale && value > 0 && this->board){
+        setZValue(2);
         setRotation(0);
-        setSize(DEFAULT_ZOOM);
+        QPixmap urlCard = QString::fromStdString(PATH_CARDS + to_string(value) + EXT_CARDS);
+        setPixmap(urlCard);
+
     }
 }
 
@@ -82,13 +84,8 @@ void BoardCard::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
 void BoardCard::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
     if (this->allowScale && value >= 0 && this->board){
         setZValue(0);
-        if (this->hasOwner){
-            setRotation(0);
-            setSize(DEFAULT_SIZE_TOKEN);
-        }else{
-            setRotation(270);
-            setSize(DEFAULT_SIZE);
-        }
+        setRotation(270);
+        setSize(DEFAULT_SIZE);
     }
 }
 
@@ -127,15 +124,23 @@ void BoardCard::setScale(bool allowScale){
 }
 
 void BoardCard::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    if (this->board)
+    if (this->board && event->button() == Qt::RightButton){
+        setZValue(0);
+        setRotation(270);
+        setSize(DEFAULT_SIZE);
+    }
+    if (this->board && event->button() == Qt::LeftButton){
         sequence->checkCards(this);
+    }
 }
 
 void BoardCard::reloadCard(){
    if (hasOwner){
-       setRotation(0);
-       QPixmap urlCard = QString::fromStdString(PATH_TOKEN + "dog_" + to_string(owner->getPlayerToken()->getTokenId()) + EXT_TOKEN);
-       setPixmap(urlCard);
+       Token* tokenCard = new Token(owner->getPlayerToken()->getTokenId());
+       tokenCard->setPos(getPosX(),getPosY());
+       tokenCard->setPixmap(tokenCard->pixmap().scaledToHeight(DEFAULT_SIZE_TOKEN));
+       sequence->scene->addItem(tokenCard);
+       tokenCard->setZValue(1);
     }else{
        setRotation(270);
        QPixmap urlCard = QString::fromStdString(PATH_CARDS + to_string(value) + EXT_CARDS);

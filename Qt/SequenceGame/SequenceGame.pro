@@ -22,7 +22,9 @@ SOURCES += main.cpp \
     ArrayStackDeck.cpp \
     ArrayCard.cpp \
     Board.cpp \
-    Token.cpp
+    Token.cpp \
+    Play.cpp \
+    UndoStack.cpp
 
 HEADERS  += \
     BoardCard.h \
@@ -34,7 +36,9 @@ HEADERS  += \
     ArrayStackDeck.h \
     ArrayCard.h \
     Board.h \
-    Token.h
+    Token.h \
+    Play.h \
+    UndoStack.h
 
 RESOURCES += \
     resources.qrc

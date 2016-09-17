@@ -1,11 +1,12 @@
 #ifndef BOARDCARD_H
 #define BOARDCARD_H
 
-
-
 #include <QBrush>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
+
 class Player;
+class Token;
 class BoardCard: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:

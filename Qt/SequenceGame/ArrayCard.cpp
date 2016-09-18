@@ -5,6 +5,8 @@
 
 using namespace std;
 
+#include "qdebug.h"
+
 ArrayCard::ArrayCard(int maxSize, int maxCards){
     this->maxSize = maxSize;
     this->maxCards = maxCards;
@@ -22,6 +24,12 @@ void ArrayCard::appendCard(DeckCard *card){
     }
     cards[currentCardSize] = card;
     currentCardSize++;
+}
+
+DeckCard* ArrayCard::popCard(){
+    DeckCard* deletedCard = cards[currentCardSize - 1];
+    currentCardSize--;
+    return deletedCard;
 }
 
 void ArrayCard::swapCards(int cardPos1, int cardPos2){
@@ -43,9 +51,7 @@ DeckCard *ArrayCard::removeCard(DeckCard* card){
     if (cardPos != lastPos){
         swapCards(cardPos,lastPos);
     }
-    DeckCard* deletedCard = cards[lastPos];
-    currentCardSize--;
-    return deletedCard;
+    return popCard();
 }
 
 DeckCard* ArrayCard::getCard(int cardPos){
@@ -54,4 +60,11 @@ DeckCard* ArrayCard::getCard(int cardPos){
 
 int ArrayCard::getCurrentCardSize(){
     return currentCardSize;
+}
+
+void ArrayCard::toString()
+{
+    for (int i = 0; i < currentCardSize; i++){
+        qDebug() << cards[i]->getValue();
+    }
 }

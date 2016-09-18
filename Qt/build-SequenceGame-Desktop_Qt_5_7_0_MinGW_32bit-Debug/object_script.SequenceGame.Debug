@@ -12,6 +12,7 @@ INPUT(
 ./debug\Token.o
 ./debug\Play.o
 ./debug\UndoStack.o
+./debug\ArrayBoard.o
 ./debug\qrc_resources.o
 ./debug\moc_BoardCard.o
 ./debug\moc_Button.o

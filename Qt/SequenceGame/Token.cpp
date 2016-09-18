@@ -4,6 +4,7 @@ const QString PATH_TOKEN = ":/Tokens/Tokens/"; // Ruta de las cartas
 const QString EXT_TOKEN = ".png";
 
 Token::Token(int tokenId){
+    this->previousRound = false;
     this->tokenId = tokenId;
     QPixmap urlImage = PATH_TOKEN + "dog_" + QString::number(tokenId) + EXT_TOKEN;
     setPixmap(urlImage);
@@ -27,6 +28,16 @@ void Token::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
 void Token::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
     QPixmap urlImage = PATH_TOKEN + "dog_" + QString::number(tokenId) + "_hover" + EXT_TOKEN;
     setPixmap(urlImage);
+}
+
+bool Token::getPreviousRound()
+{
+    return previousRound;
+}
+
+void Token::setPreviousRound(bool value)
+{
+    previousRound = value;
 }
 
 void Token::setTokenId(int tokenId){

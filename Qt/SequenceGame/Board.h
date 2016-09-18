@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include "ArrayBoard.h"
 #include "BoardCard.h"
 
 class Board{
@@ -16,7 +17,10 @@ public:
     int getMatrizPosX(BoardCard* card);
     int getMatrizPosY(BoardCard* card);
 
+    void resetBoard(ArrayBoard* tokenCards = NULL, ArrayBoard *tokenCards2 = NULL);
+
     void toString();
+    bool winnerCard(ArrayBoard *tokenCards, BoardCard *card, ArrayBoard *tokenCards2);
 private:
     int rows;
     int columns;

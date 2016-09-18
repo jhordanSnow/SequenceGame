@@ -32,6 +32,9 @@ public:
     bool getHasOwner();
     void setHasOwner(bool value);
 
+    Token *getTokenCard();
+    void setTokenCard(Token *value);
+
 private:
     int value; // Valor de la carta
     int posX; // Variable para saber la posición en X de la carta dentro de la pantalla
@@ -42,6 +45,7 @@ private:
     bool board;
     bool hasOwner;
     Player* owner;
+    Token* tokenCard;
 };
 
 #endif // BOARDCARD_H

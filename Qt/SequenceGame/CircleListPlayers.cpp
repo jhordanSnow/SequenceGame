@@ -38,6 +38,14 @@ Player *CircleListPlayers::getPlayerById(int playerId){
     return players[playerId];
 }
 
+void CircleListPlayers::setPlayer(Player* player){
+    for (int i = 0; i<currentSize;i++){
+        if (players[i] == player){
+            currentPlayer = i;
+        }
+    }
+}
+
 
 Player *CircleListPlayers::getPlayer(){
     if (currentPlayer < 0 || currentPlayer > currentSize){

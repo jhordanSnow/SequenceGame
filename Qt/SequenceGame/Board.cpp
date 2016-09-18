@@ -92,7 +92,37 @@ int Board::getMatrizPosY(BoardCard* card){
     }
 }
 
+bool Board::winnerCard(ArrayBoard *tokenCards, BoardCard* card, ArrayBoard* tokenCards2){
+    if (tokenCards == NULL){
+        return false;
+    }
+    for(int i = 0;i<tokenCards->getCurrentCardSize(); i++){
+        if (card == tokenCards->getCard(i)){
+            return true;
+        }
+    }
+    if (tokenCards2 == NULL){
+        return false;
+    }
+    for(int i = 0;i<tokenCards2->getCurrentCardSize(); i++){
+        if (card == tokenCards2->getCard(i)){
+            return true;
+        }
+    }
+    return false;
+}
 
+void Board::resetBoard(ArrayBoard *tokenCards, ArrayBoard* tokenCards2){
+    for (int i = 0 ; i < rows; i++){
+        for (int j = 0; j < columns; j++){
+            BoardCard* tempCard = getCard(i,j);
+            if (tempCard->getHasOwner() && !winnerCard(tokenCards,tempCard,tokenCards2)){
+                tempCard->setOwner(NULL);
+                tempCard->reloadCard();
+            }
+        }
+    }
+}
 
 void Board::fillBoard(){
     table[0][0] = new BoardCard(0); // Comodin

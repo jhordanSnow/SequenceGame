@@ -17,6 +17,11 @@ public:
     void toString();
     int getCurrentSize();
 
+    int getMaxSize();
+    void setMaxSize(int value);
+
+    void reFillDeck(int size, ArrayStackDeck *newDeck);
+    void fillDeck2();
 private:
     DeckCard** cards; // Puntero a los punteros de la carta
     int maxSize; // Máximo tamaño del array

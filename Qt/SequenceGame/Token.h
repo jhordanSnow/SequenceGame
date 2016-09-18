@@ -14,10 +14,14 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
+    bool getPreviousRound();
+    void setPreviousRound(bool value);
+
 signals:
     void clicked();
 private:
     int tokenId;
+    bool previousRound;
 };
 
 #endif // TOKEN_H

@@ -3,6 +3,7 @@
 Player::Player(QString name, Token *playerToken){
     this->name = name;
     this->playerToken = playerToken;
+    this->wins = 0;
     hand = new ArrayCard(10,7);
 }
 
@@ -28,4 +29,14 @@ Token* Player::getPlayerToken(){
 
 void Player::setPlayerToken(Token* value){
     playerToken = value;
+}
+
+int Player::getWins()
+{
+    return wins;
+}
+
+void Player::setWins(int value)
+{
+    wins = value;
 }

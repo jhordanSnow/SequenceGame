@@ -20,10 +20,14 @@ public:
     Token* getPlayerToken();
     void setPlayerToken(Token *value);
 
+    int getWins();
+    void setWins(int value);
+
 private:
     QString name; // Nombre del jugador
     ArrayCard* hand; // Array con la mano del jugador
     Token* playerToken;
+    int wins;
 };
 
 #endif // PLAYER_H

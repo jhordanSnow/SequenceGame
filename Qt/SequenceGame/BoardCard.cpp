@@ -21,6 +21,7 @@ BoardCard::BoardCard(){}
 
 BoardCard::BoardCard(int value, bool rotate, bool board){
     hasOwner = false;
+    setZValue(0);
     /*
     ** Setea la ruta de la imagen deacuerdo al valor y el tipo de esta
     ** y se la agraga al objeto
@@ -101,6 +102,16 @@ void BoardCard::setHasOwner(bool value){
     hasOwner = value;
 }
 
+Token *BoardCard::getTokenCard()
+{
+    return tokenCard;
+}
+
+void BoardCard::setTokenCard(Token *value)
+{
+    tokenCard = value;
+}
+
 Player *BoardCard::getOwner(){
     return owner;
 }
@@ -136,14 +147,25 @@ void BoardCard::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
 void BoardCard::reloadCard(){
    if (hasOwner){
-       Token* tokenCard = new Token(owner->getPlayerToken()->getTokenId());
+       tokenCard = new Token(owner->getPlayerToken()->getTokenId());
        tokenCard->setPos(getPosX(),getPosY());
        tokenCard->setPixmap(tokenCard->pixmap().scaledToHeight(DEFAULT_SIZE_TOKEN));
        sequence->scene->addItem(tokenCard);
        tokenCard->setZValue(1);
     }else{
-       setRotation(270);
+       if (this->board){
+           sequence->scene->removeItem(tokenCard);
+           tokenCard = NULL;
+           if (this->allowRotate){
+               setTransformOriginPoint(DEFAULT_SIZE/4,DEFAULT_SIZE/2);
+               setRotation(270);
+           }
+       }
+
        QPixmap urlCard = QString::fromStdString(PATH_CARDS + to_string(value) + EXT_CARDS);
        setPixmap(urlCard);
+       if (this->allowScale && value >= 0 && this->board){
+           setSize(DEFAULT_SIZE);
+       }
    }
 }

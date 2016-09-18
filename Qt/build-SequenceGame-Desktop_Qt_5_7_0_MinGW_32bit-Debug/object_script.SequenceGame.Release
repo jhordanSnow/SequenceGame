@@ -12,6 +12,7 @@ INPUT(
 ./release\Token.o
 ./release\Play.o
 ./release\UndoStack.o
+./release\ArrayBoard.o
 ./release\qrc_resources.o
 ./release\moc_BoardCard.o
 ./release\moc_Button.o

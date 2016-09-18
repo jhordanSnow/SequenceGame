@@ -1,5 +1,7 @@
 #include "Play.h"
 
+#include "qdebug.h"
+
 Play::Play(){
     playId = 0;
     round = 0;
@@ -7,15 +9,18 @@ Play::Play(){
     playedCard = NULL;
     nextPlay = NULL;
     previousPlay = NULL;
+    playerTurn = NULL;
 }
 
-Play::Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, BoardCard *tableCard, Play* previousPlay, Play* nextPay){
+Play::Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, BoardCard *tableCard, Player *playerTurn, Player *lastOwner, Play* previousPlay){
+
     this->playId = playId;
     this->round = round;
     this->drawedCard = drawedCard;
     this->playedCard = playedCard;
     this->tableCard = tableCard;
-    this->nextPlay = nextPay;
+    this->playerTurn = playerTurn;
+    this->lastOwner = lastOwner;
     this->previousPlay = previousPlay;
 }
 
@@ -43,6 +48,22 @@ void Play::setNextPlay(Play *value){
     nextPlay = value;
 }
 
+
+void Play::removeNextPlay(){
+    nextPlay = new Play();
+
+}
+
+Player *Play::getLastOwner()
+{
+    return lastOwner;
+}
+
+void Play::setLastOwner(Player *value)
+{
+    lastOwner = value;
+}
+
 Play *Play::getPreviousPlay(){
     return previousPlay;
 }
@@ -63,4 +84,34 @@ int Play::getRound()
 void Play::setRound(int value)
 {
     round = value;
+}
+
+BoardCard *Play::getTableCard()
+{
+    return tableCard;
+}
+
+void Play::setTableCard(BoardCard *value)
+{
+    tableCard = value;
+}
+
+DeckCard *Play::getPlayedCard()
+{
+    return playedCard;
+}
+
+void Play::setPlayedCard(DeckCard *value)
+{
+    playedCard = value;
+}
+
+Player *Play::getPlayerTurn()
+{
+    return playerTurn;
+}
+
+void Play::setPlayerTurn(Player *value)
+{
+    playerTurn = value;
 }

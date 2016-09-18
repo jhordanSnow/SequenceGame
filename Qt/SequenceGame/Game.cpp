@@ -1,7 +1,7 @@
 #include "Game.h"
 #include <qdebug.h>
 
-#define GAME_FONT_SIZE 30
+#define GAME_FONT_SIZE 25
 const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 
 #define WINNER_ROW 5
@@ -19,16 +19,16 @@ const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 #define MARGIN_CARDS 5
 #define BACK_POSX 5
 #define BACK_POSY 538
-#define INITIAL_BOARD_POSX 450
+#define INITIAL_BOARD_POSX 520
 #define INITIAL_BOARD_POSY 10
-
 #define ID_J_1 49
 #define ID_J_2 51
-
 #define ID_JOKER_1 50
 #define ID_JOKER_2 52
 
 #define maxToken 4
+
+#define MAX_WINS 2
 
 Game::Game(){
     tokenId = 1;
@@ -61,8 +61,16 @@ Game::Game(){
     discardCards = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
 
     undoPile = new UndoStack();
+    redoPile = new UndoStack();
+
+    roundLabel = NULL;
 
     selectedHandCard = NULL;
+
+    winnerPlayer = NULL;
+    oldWinnerTokens = NULL;
+    usedToken = false;
+    winnerTokens = new ArrayBoard(5,5);
 }
 
 void Game::loadBoard(int posX, int posY){
@@ -120,42 +128,33 @@ void Game::startGame(){
     deckImage->setScale(false);
     scene->addItem(deckImage);
 
-    BoardCard* discardImage = new BoardCard(-2,false);
+    discardImage = new BoardCard(-2,false);
     discardImage->setPosition(20, 350);
     discardImage->setScale(false);
     scene->addItem(discardImage);
 
-    Button* randomizeBoard = new Button("back");
-    randomizeBoard->setPos(40, 420);
-    scene->addItem(randomizeBoard);
-    connect (randomizeBoard, SIGNAL(clicked()), this, SLOT(randomizeBoard()));
+    Button* undoButton = new Button("undo");
+    undoButton->setPos(242, 530);
+    scene->addItem(undoButton);
+    undoButton->setZValue(1);
+    connect (undoButton, SIGNAL(clicked()), this, SLOT(undoFunction()));
+
+    Button* redoButton = new Button("redo");
+    redoButton->setPos(312, 530);
+    scene->addItem(redoButton);
+    redoButton->setZValue(1);
+    connect (redoButton, SIGNAL(clicked()), this, SLOT(redoFunction()));
 
     /*
     ** Cargamos las manos de cada jugador
     */
     int maxHandCards = (this->numberPlayers == 4) ? 6 : 7;
-    players->goToStart();
+    fillPlayersHand(maxHandCards);
 
-    for (int i = 0; i < players->getCurrentSize(); i++){
-        Player* currentPlayer = players->getPlayer();
-        for (int j = 0; j < maxHandCards; j++){
-            currentPlayer->drawCard(deck->popCard());
-        }
-        players->nextPlayer();
-    }
+    players->goToStart();
 
     round = 0;
     startRounds();
-
-    /*for (int i = 0; i < players->getCurrentSize(); i++){
-        Player* currentPlayer = players->getPlayer();
-        qDebug() << currentPlayer->getName();
-        qDebug() << "------------------------------";
-        currentPlayer->getHand()->toString();
-        qDebug() << deck->getCurrentSize();
-        players->nextPlayer();
-    }*/
-
 }
 
 void Game::selectPlayer(){
@@ -315,24 +314,22 @@ void Game::startRounds(){
     if (round > 0){
         cleanRound(players->getPlayer());
         players->nextPlayer();
+    }else{
+        Button* randomizeBoard = new Button("random");
+        randomizeBoard->setPos(40, 420);
+        scene->addItem(randomizeBoard);
+        randomizeBoard->setZValue(0);
+        connect (randomizeBoard, SIGNAL(clicked()), this, SLOT(randomizeBoard()));
     }
 
     Player* currentPlayer = players->getPlayer();
     showRound(currentPlayer);
-
-    Button* next = new Button(QString("next"));
-    next->setPos(1050,538);
-    connect (next, SIGNAL(clicked()), this, SLOT(startRounds()));
-
-    round++;
-
-
-    scene->addItem(next);
 }
 
 void Game::cleanRound(Player* player){
     scene->removeItem(playerToken);
     scene->removeItem(playerNameLabel);
+    scene->removeItem(roundLabel);
     ArrayCard* currentHand = player->getHand();
     for (int i = 0; i < currentHand->getCurrentCardSize(); i++){
         scene->removeItem(currentHand->getCard(i));
@@ -341,13 +338,18 @@ void Game::cleanRound(Player* player){
 
 void Game::showRound(Player* player){
     playerToken = player->getPlayerToken();
-    playerToken->setPos(40,120);
+    playerToken->setPos(60,150);
     scene->addItem(playerToken);
     //qDebug() << tokenTemp->getTokenId();
 
+    roundLabel = new QGraphicsTextItem("Round #" + QString::number(round + 1)); // Creamos el label del jugador
+    roundLabel->setFont(gameFont); // Seteamos el estilo del titulo
+    roundLabel->setPos(50,20);
+    scene->addItem(roundLabel);
+
     playerNameLabel = new QGraphicsTextItem(player->getName()); // Creamos el label del jugador
     playerNameLabel->setFont(gameFont); // Seteamos el estilo del titulo
-    playerNameLabel->setPos(30,50);
+    playerNameLabel->setPos(50,60);
     scene->addItem(playerNameLabel);
 
     /*Token* tokenTemp = player->getPlayerToken();
@@ -385,19 +387,17 @@ void Game::randomizeBoard(){
     reloadBoard();
 }
 
-void Game::setSelectedCard(DeckCard* handCard){
-    this->selectedHandCard = handCard;
-}
-
-void Game::checkCards(BoardCard *boardCard){
+void Game::checkCards(BoardCard *boardCard, bool isRedo){
     int handCardId =  (selectedHandCard == NULL) ? NULL : selectedHandCard->getValue();
+    Player* turnPlayer = players->getPlayer();
+
     if((boardCard->getValue() == handCardId || handCardId == ID_J_1 || handCardId == ID_J_2)
             && !boardCard->getHasOwner() && boardCard->getValue() > 0){
 
         discardCards->pushCard(selectedHandCard);
         changeDiscardImage(selectedHandCard);
-        players->getPlayer()->getHand()->removeCard(selectedHandCard);
-        boardCard->setOwner(players->getPlayer());
+        turnPlayer->getHand()->removeCard(selectedHandCard);
+        boardCard->setOwner(turnPlayer);
         boardCard->reloadCard();
 
         DeckCard* drawedCard = deck->popCard();
@@ -405,29 +405,46 @@ void Game::checkCards(BoardCard *boardCard){
 
         scene->removeItem(selectedHandCard);
         selectedHandCard = NULL;
-        players->getPlayer()->drawCard(drawedCard);
 
+        turnPlayer->drawCard(drawedCard);
 
+        undoPile->push(1, round, drawedCard, playedCard, boardCard, turnPlayer);
 
-        undoPile->push(1, round, drawedCard, playedCard, boardCard);
-        qDebug() << " Debug ";
-        undoPile->toString();
-        qDebug() << " ------------------------------------------- ";
         round++;
 
         checkWinner(boardCard);
-        //startRounds();
+        if (!isRedo){
+            redoPile = new UndoStack();
+        }
+        startRounds();
     }else if (handCardId == ID_JOKER_1 || handCardId == ID_JOKER_2){
-        if (boardCard->getHasOwner() && boardCard->getOwner() != selectedHandCard->getOwner()){
+        if (boardCard->getHasOwner() && boardCard->getOwner() != players->getPlayer()){
+            discardCards->pushCard(selectedHandCard);
+
+            Player* lastOwner = boardCard->getOwner();
+
             boardCard->setOwner(NULL);
             boardCard->reloadCard();
+
+            DeckCard* playedCard = selectedHandCard;
+
             changeDiscardImage(selectedHandCard);
+            turnPlayer->getHand()->removeCard(selectedHandCard);
             scene->removeItem(selectedHandCard);
             selectedHandCard = NULL;
-            players->getPlayer()->drawCard(deck->popCard());
+
+            DeckCard* drawedCard = deck->popCard();
+
+            players->getPlayer()->drawCard(drawedCard);
+
+            undoPile->push(2, round, drawedCard, playedCard, boardCard, turnPlayer, lastOwner);
 
             round++;
-            //startRounds();
+
+            if (!isRedo){
+                redoPile = new UndoStack();
+            }
+            startRounds();
         }
     }else{
         qDebug() << "Nop nigga";
@@ -440,30 +457,67 @@ void Game::checkWinner(BoardCard* boardCard){
     int matrixRows = tableBoard->getRows();
     int matrixCols = tableBoard->getColumns();
 
+    winnerTokens = new ArrayBoard(5,5);
+    usedToken = false;
+    winnerTokens->appendCard(boardCard);
     int horizontalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 0,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 0,matrixRows, matrixCols, boardCard, 0);
-    int verticalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 0, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, 0, -1,matrixRows, matrixCols, boardCard, 0);
-    int diagonalDown = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, -1,matrixRows, matrixCols, boardCard, 0);
-    int diagonalUp = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, -1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 1,matrixRows, matrixCols, boardCard, 0);
-
-    if (horizontalTokens == WINNER_ROW || verticalTokens == WINNER_ROW ||
-        diagonalDown == WINNER_ROW || diagonalUp == WINNER_ROW){
-        qDebug() << players->getPlayer()->getName() << "!!! You Win";
-        mainMenu();
+    if (horizontalTokens >= WINNER_ROW){
+        winnerPlayer = players->getPlayer();
+        winnerOptions();
+    }else{
+        winnerTokens = new ArrayBoard(5,5);
+        usedToken = false;
+        winnerTokens->appendCard(boardCard);
+        int verticalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 0, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, 0, -1,matrixRows, matrixCols, boardCard, 0);
+        if (verticalTokens >= WINNER_ROW){
+            winnerPlayer = players->getPlayer();
+            winnerOptions();
+        }else{
+            winnerTokens = new ArrayBoard(5,5);
+            usedToken = false;
+            winnerTokens->appendCard(boardCard);
+            int diagonalDown = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, -1,matrixRows, matrixCols, boardCard, 0);
+            if (diagonalDown >= WINNER_ROW){
+                winnerPlayer = players->getPlayer();
+                winnerOptions();
+            }else{
+                winnerTokens = new ArrayBoard(5,5);
+                usedToken = false;
+                winnerTokens->appendCard(boardCard);
+                int diagonalUp = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, -1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 1,matrixRows, matrixCols, boardCard, 0);
+                if (diagonalUp >= WINNER_ROW){
+                    winnerPlayer = players->getPlayer();
+                    winnerOptions();
+                }
+            }
+        }
     }
+}
 
-    /*qDebug() << "Horizontal = " << horizontalTokens;
-    qDebug() << "Vertical = " << verticalTokens;
-    qDebug() << "Diagonal creciente = " << diagonalUp;
-    qDebug() << "Diagonal decreciente = " << diagonalDown;
-    qDebug() << "-------------------------------------------------------------------------";*/
-
+void Game::winnerOptions(){
+    winnerPlayer->setWins(winnerPlayer->getWins() + 1);
+    undoPile->push(3, round, NULL, NULL, NULL, NULL);
+    if (numberPlayers == MAX_WINS){
+        if (winnerPlayer->getWins() == MAX_WINS){
+            winnerMenu();
+        }else{
+            resetGame();
+        }
+    }else{
+        winnerMenu();
+    }
 }
 
 void Game::changeDiscardImage(BoardCard *boardCard){
-    BoardCard* discardImage = new BoardCard(boardCard->getValue(),false, false);
-    discardImage->setPosition(20, 350);
-    discardImage->setScale(false);
-    scene->addItem(discardImage);
+    scene->removeItem(discardImage);
+    if (boardCard->getValue() >= 0){
+        discardImage = new BoardCard(boardCard->getValue(),false, false);
+        discardImage->setPosition(20, 350);
+        discardImage->setScale(false);
+        scene->addItem(discardImage);
+    }
+
+
 }
 
 int Game::recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int cRows, int cCols, BoardCard* boardCard, int tokens){
@@ -476,7 +530,19 @@ int Game::recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int 
     }
     BoardCard* nextCard = tableBoard->getCard(newPosX, newPosY);
     if (nextCard->getOwner() == boardCard->getOwner()){
+        try{
+            winnerTokens->appendCard(nextCard);
+        }catch(std::runtime_error e){}
+
+        if (boardCard->getTokenCard()->getPreviousRound() && !usedToken){
+            usedToken = true;
+            return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens + 1);
+        }
+        if (usedToken && boardCard->getTokenCard()->getPreviousRound()){
+            return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens);
+        }
         return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens + 1);
+
     }
     if ((newPosX == 0 && newPosY == 0) || (newPosX == 9 && newPosY == 9) ||
         (newPosX == 9 && newPosY == 0) || (newPosX == 0 && newPosY == 9)){
@@ -492,10 +558,15 @@ void Game::reloadBoard(){
             BoardCard* cardAux = tableBoard->getCard(i,j);
             int positionCardX = INITIAL_BOARD_POSX + ((BOARD_CARD_HEIGHT + MARGIN_CARDS) * i);
             int positionCardY = INITIAL_BOARD_POSY + ((BOARD_CARD_WIDTH + MARGIN_CARDS) * j);
-            cardAux->setPos(positionCardX, positionCardY);
+            cardAux->setPosition(positionCardX, positionCardY);
             scene->addItem(cardAux);
         }
     }
+}
+
+
+void Game::setSelectedCard(DeckCard* handCard){
+    this->selectedHandCard = handCard;
 }
 
 void Game::mouseMoveEvent(QMouseEvent* event){
@@ -507,15 +578,127 @@ void Game::mouseMoveEvent(QMouseEvent* event){
     QGraphicsView::mouseMoveEvent(event);
 }
 
-void Game::mousePressEvent(QMouseEvent *event)
+void Game::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton){
-        QGraphicsView::mousePressEvent(event);
-    }
     if (event->button() == Qt::RightButton && selectedHandCard != NULL){
-        selectedHandCard->setZValue(-1);
+        selectedHandCard->setZValue(0);
         selectedHandCard->defaultPos();
+        selectedHandCard->reloadCard();
         selectedHandCard = NULL;
     }
 }
 
+void Game::fillPlayersHand(int maxHandCards){
+    players->goToStart();
+
+    for (int i = 0; i < players->getCurrentSize(); i++){
+        Player* currentPlayer = players->getPlayer();
+        for (int j = 0; j < maxHandCards; j++){
+            currentPlayer->drawCard(deck->popCard());
+        }
+        players->nextPlayer();
+    }
+}
+
+void Game::discardHands(){
+    for (int i = 0; i < players->getCurrentSize(); i++){
+        Player* currentPlayer = players->getPlayer();
+        int handSize = currentPlayer->getHand()->getCurrentCardSize();
+        for (int j = 0; j < handSize; j++){
+            DeckCard* cardTemp = currentPlayer->getHand()->popCard();
+            discardCards->pushCard(cardTemp);
+            changeDiscardImage(cardTemp);
+        }
+        players->nextPlayer();
+    }
+}
+
+void Game::resetGame(){
+    if (winnerPlayer != NULL){
+        cleanRound(winnerPlayer);
+
+        for(int i = 0; i < winnerTokens->getCurrentCardSize(); i++){
+            winnerTokens->getCard(i)->getTokenCard()->setPreviousRound(true);
+        }
+
+        tableBoard->resetBoard(winnerTokens, oldWinnerTokens);
+        oldWinnerTokens = winnerTokens;
+
+        winnerTokens = new ArrayBoard(5,5);
+
+        round = 0;
+
+        undoPile = new UndoStack();
+
+        ArrayStackDeck* newDeck = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
+        newDeck->fillDeck2();
+        newDeck->shuffleDeck();
+
+        deck->setMaxSize(deck->getMaxSize() + (MAX_DECK_CARDS * MAX_DECKS));
+        deck->reFillDeck((MAX_DECK_CARDS * MAX_DECKS), newDeck);
+
+        int maxHandCards = (this->numberPlayers == 4) ? 6 : 7;
+
+        discardHands();
+
+        fillPlayersHand(maxHandCards);
+
+    }
+}
+
+void Game::winnerMenu(){
+    scene->clear();
+    //cleanRound(winnerPlayer);
+    qDebug() << winnerPlayer->getName() + " Ha sido el ganador";
+}
+
+void Game::undoFunction(){
+    if (undoPile->getSize() > 0){
+        Play* lastPlay = undoPile->pop();
+    //QEvent::MouseButtonPress, 0, Qt::MouseButton::RightButton, Qt::MouseButton::RightButton, Qt::KeyboardModifier::NoModifier )
+        //QGraphicsView::mouseDoubleClickEvent(QMouseEvent(QEvent::MouseButtonDblClick, 0, Qt::RightButton, Qt::RightButton, Qt::NoModifier));
+        selectedHandCard = NULL;
+
+        cleanRound(players->getPlayer());
+
+        Player* playerTurn = lastPlay->getPlayerTurn();
+        players->setPlayer(playerTurn);
+        BoardCard* tableCard = lastPlay->getTableCard();
+
+        deck->pushCard(playerTurn->getHand()->removeCard(lastPlay->getDrawedCard()));
+
+        if (lastPlay->getPlayId() == 1){
+
+            tableCard->setOwner(NULL);
+            tableCard->reloadCard();
+
+        }else if (lastPlay->getPlayId() == 2){
+            tableCard->setOwner(lastPlay->getLastOwner());
+            tableCard->reloadCard();
+        }else if (lastPlay->getPlayId() == 3){
+
+        }
+
+        DeckCard* handCardTemp = discardCards->popCard();
+        playerTurn->drawCard(handCardTemp);
+        handCardTemp->reloadCard();
+
+        changeDiscardImage(discardCards->topCard());
+
+        redoPile->push(lastPlay->getPlayId(),round, lastPlay->getDrawedCard(),lastPlay->getPlayedCard(),lastPlay->getTableCard(),playerTurn,lastPlay->getLastOwner());
+
+        round = lastPlay->getRound();
+        showRound(playerTurn);
+    }
+}
+
+void Game::redoFunction(){
+    if (redoPile->getSize() > 0){
+        Play* lastPlay = redoPile->pop();
+
+        selectedHandCard = lastPlay->getPlayedCard();
+        checkCards(lastPlay->getTableCard(), true);
+
+        round = lastPlay->getRound();
+    }
+}

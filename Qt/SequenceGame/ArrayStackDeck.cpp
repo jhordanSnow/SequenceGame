@@ -23,11 +23,26 @@ void ArrayStackDeck::pushCard(DeckCard *card){
     currentSize++;
 }
 
+void ArrayStackDeck::reFillDeck(int size, ArrayStackDeck* newDeck){
+    for (int i = 0; i < newDeck->getMaxSize() - 1; i++){
+        //pushCard(newDeck->popCard());
+        pushCard(new DeckCard(51));
+    }
+}
+
+void ArrayStackDeck::fillDeck2(){
+    for (int i = 0; i < maxSize; i++){
+        int indiceCard = (i % maxCards) + 1;
+        pushCard(new DeckCard(indiceCard));
+    }
+}
+
 void ArrayStackDeck::fillDeck(){
     for (int i = 0; i < maxSize; i++){
         int indiceCard = (i % maxCards) + 1;
         //pushCard(new DeckCard(indiceCard));
-        pushCard(new DeckCard(51));
+        (i%2 == 0) ? pushCard(new DeckCard(51)) : pushCard(new DeckCard(50));
+        //pushCard(new DeckCard(51));
     }
 }
 
@@ -45,6 +60,9 @@ void ArrayStackDeck::shuffleDeck(){
 }
 
 DeckCard *ArrayStackDeck::topCard(){
+    if (currentSize == 0){
+        return new DeckCard(-2);
+    }
     return cards[currentSize - 1];
 }
 
@@ -62,4 +80,14 @@ void ArrayStackDeck::toString(){
 
 int ArrayStackDeck::getCurrentSize(){
     return currentSize;
+}
+
+int ArrayStackDeck::getMaxSize()
+{
+    return maxSize;
+}
+
+void ArrayStackDeck::setMaxSize(int value)
+{
+    maxSize = value;
 }

@@ -15,6 +15,10 @@ public:
     DeckCard* getCard(int cardPos);
     int getCurrentCardSize();
 
+
+    void toString();
+
+    DeckCard *popCard();
 private:
     DeckCard** cards; // Puntero a los punteros de las cartas
     int maxSize; // Máximo tamaño del array

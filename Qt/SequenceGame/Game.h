@@ -4,6 +4,7 @@
 #include "CircleListPlayers.h"
 #include "ArrayStackDeck.h"
 #include "UndoStack.h"
+#include "ArrayBoard.h"
 #include "BoardCard.h"
 #include "DeckCard.h"
 #include "Button.h"
@@ -11,6 +12,7 @@
 #include "Token.h"
 #include "Board.h"
 
+#include <QEvent>
 #include <QMouseEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -30,18 +32,20 @@ public:
     void reloadBoard();
     bool tokenTaken(int idToken);
     void setSelectedCard(DeckCard *handCard);
-    void checkCards(BoardCard* boardCard);
+    void checkCards(BoardCard* boardCard, bool isRedo = false);
     void checkWinner(BoardCard* boardCard);
     void changeDiscardImage(BoardCard* boardCard);
-
     int recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int cRows, int cCols, BoardCard* boardCard, int tokens);
-
     QGraphicsScene *scene; // Escena del juego
-
     void mouseMoveEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
 
-    void mousePressEvent(QMouseEvent* event);
+    void resetGame();
+    void winnerMenu();
 
+    void winnerOptions();
+    void fillPlayersHand(int maxHandCards);
+    void discardHands();
 private:
     int numberPlayers; // Cantidad de jugadores
     CircleListPlayers* players; // Lista de jugadores
@@ -50,11 +54,21 @@ private:
     Board* tableBoard; //Inicializa el tablero de las cartas
     int round;
     QGraphicsTextItem* playerNameLabel; // Nombre del jugador
+    QGraphicsTextItem* roundLabel; // Nombre del jugador
     Token* playerToken;
     QString playerName;
     int tokenId;
     DeckCard* selectedHandCard;
     UndoStack* undoPile;
+    UndoStack* redoPile;
+    BoardCard* discardImage;
+
+    Player* winnerPlayer;
+    ArrayBoard* winnerTokens;
+    ArrayBoard* oldWinnerTokens;
+
+    bool usedToken;
+
 public slots:
     void mainMenu(); // Inicia el menú inicial del juego
     void startGame(); // Inicio del juego
@@ -66,6 +80,8 @@ public slots:
     void startRounds(); // Cargamos las rondas
     void changeToken(); // Cambiamos el token de la selección del personaje
     void randomizeBoard();
+    void undoFunction();
+    void redoFunction();
 };
 
 #endif // GAME_H

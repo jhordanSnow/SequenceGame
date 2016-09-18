@@ -15,6 +15,7 @@ public:
     int getCurrentSize();
     void setCurrentSize(int currentSize);
     Player *getPlayerById(int playerId);
+    void setPlayer(Player* player);
 private:
     Player** players; // Puntero a jugadores
     int maxSize; // Máximo tamaño del array

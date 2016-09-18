@@ -68,6 +68,12 @@
         <file>Buttons/start_hover.png</file>
         <file>Buttons/next.png</file>
         <file>Buttons/next_hover.png</file>
+        <file>Buttons/undo.png</file>
+        <file>Buttons/redo.png</file>
+        <file>Buttons/redo_hover.png</file>
+        <file>Buttons/undo_hover.png</file>
+        <file>Buttons/random.png</file>
+        <file>Buttons/random_hover.png</file>
     </qresource>
     <qresource prefix="/Images">
         <file>Images/main.jpg</file>

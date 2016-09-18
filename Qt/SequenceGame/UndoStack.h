@@ -2,16 +2,20 @@
 #define UNDOSTACK_H
 
 #include "Play.h"
+#include "Player.h"
 #include "DeckCard.h"
 
 class UndoStack{
 public:
     UndoStack();
     Play *topPlay();
-    void push(int playId, int round, DeckCard *drawedCard, DeckCard* playedCard, BoardCard* tableCard);
+    void push(int playId, int round, DeckCard *drawedCard, DeckCard* playedCard, BoardCard* tableCard, Player* playerTurn, Player* lastOwner = NULL);
     Play* pop();
 
     void toString();
+    int getSize();
+    void setSize(int value);
+
 private:
     Play* first;
     Play* last;

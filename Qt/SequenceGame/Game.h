@@ -13,9 +13,11 @@
 #include "Board.h"
 
 #include <QEvent>
+#include <QMessageBox>
 #include <QMouseEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsRectItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsPixmapItem>
 
@@ -39,13 +41,16 @@ public:
     QGraphicsScene *scene; // Escena del juego
     void mouseMoveEvent(QMouseEvent* event);
     void mouseDoubleClickEvent(QMouseEvent* event);
-
-    void resetGame();
-    void winnerMenu();
+    void winnerMenu(bool winner = false);
 
     void winnerOptions();
     void fillPlayersHand(int maxHandCards);
     void discardHands();
+    void defaultSelectedCard();
+
+    void setGame(Game* newGameTemp);
+
+    QGraphicsRectItem* winnerScene;
 private:
     int numberPlayers; // Cantidad de jugadores
     CircleListPlayers* players; // Lista de jugadores
@@ -68,7 +73,7 @@ private:
     ArrayBoard* oldWinnerTokens;
 
     bool usedToken;
-
+    bool endGame;
 public slots:
     void mainMenu(); // Inicia el menú inicial del juego
     void startGame(); // Inicio del juego
@@ -82,6 +87,9 @@ public slots:
     void randomizeBoard();
     void undoFunction();
     void redoFunction();
+    void resetContinueGame();
+    void resetGame();
+    void newGameSlot();
 };
 
 #endif // GAME_H

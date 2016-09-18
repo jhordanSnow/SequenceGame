@@ -12,7 +12,7 @@ Play::Play(){
     playerTurn = NULL;
 }
 
-Play::Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, BoardCard *tableCard, Player *playerTurn, Player *lastOwner, Play* previousPlay){
+Play::Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, BoardCard *tableCard, Player *playerTurn, Player *lastOwner, ArrayBoard* winnerTokens, Play* previousPlay){
 
     this->playId = playId;
     this->round = round;
@@ -22,6 +22,7 @@ Play::Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, Bo
     this->playerTurn = playerTurn;
     this->lastOwner = lastOwner;
     this->previousPlay = previousPlay;
+    this->winnerTokens = winnerTokens;
 }
 
 int Play::getPlayId(){
@@ -62,6 +63,16 @@ Player *Play::getLastOwner()
 void Play::setLastOwner(Player *value)
 {
     lastOwner = value;
+}
+
+ArrayBoard *Play::getWinnerTokens()
+{
+    return winnerTokens;
+}
+
+void Play::setWinnerTokens(ArrayBoard *value)
+{
+    winnerTokens = value;
 }
 
 Play *Play::getPreviousPlay(){

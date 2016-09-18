@@ -4,11 +4,12 @@
 #include "DeckCard.h"
 #include "BoardCard.h"
 #include "Player.h"
+#include "ArrayBoard.h"
 
 class Play{
 public:
     Play();
-    Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, BoardCard* tableCard , Player* playerTurn, Player* lastOwner, Play* previousPlay = NULL);
+    Play(int playId, int round, DeckCard* drawedCard, DeckCard* playedCard, BoardCard* tableCard , Player* playerTurn, Player* lastOwner, ArrayBoard* winnerTokens  = NULL, Play* previousPlay = NULL);
     int getPlayId();
     void setPlayId(int value);
 
@@ -38,6 +39,9 @@ public:
     Player *getLastOwner();
     void setLastOwner(Player *value);
 
+    ArrayBoard *getWinnerTokens();
+    void setWinnerTokens(ArrayBoard *value);
+
 private:
     int playId;
     int round;
@@ -48,6 +52,8 @@ private:
     Player* lastOwner;
     Play* nextPlay;
     Play* previousPlay;
+
+    ArrayBoard *winnerTokens;
 };
 
 #endif // PLAY_H

@@ -12,10 +12,8 @@ Play* UndoStack::topPlay(){
     return last;
 }
 
-void UndoStack::push(int playId, int round, DeckCard *drawedCard, DeckCard* playedCard, BoardCard* tableCard, Player* playerTurn, Player *lastOwner){
-    //qDebug() << " Antes de llamar al constructor= " << last->getPlayId();
-    Play* newPlay = new Play(playId, round, drawedCard, playedCard, tableCard, playerTurn, lastOwner, last);
-    //qDebug() << " Despues de llamar al constructor= " << newPlay->getPreviousPlay()->getPlayId();
+void UndoStack::push(int playId, int round, DeckCard *drawedCard, DeckCard* playedCard, BoardCard* tableCard, Player* playerTurn, ArrayBoard* winnerTokens, Player *lastOwner){
+    Play* newPlay = new Play(playId, round, drawedCard, playedCard, tableCard, playerTurn, lastOwner, winnerTokens,last);
     last->setNextPlay(newPlay);
     last = newPlay;
     size++;

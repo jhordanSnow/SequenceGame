@@ -206,14 +206,22 @@ release/qrc_resources.cpp: ../SequenceGame/resources.qrc \
 		../SequenceGame/Cards/4.png \
 		../SequenceGame/Cards/40.png \
 		../SequenceGame/Buttons/4_players_hover.png \
+		../SequenceGame/Buttons/newgame.png \
 		../SequenceGame/Buttons/random.png \
 		../SequenceGame/Buttons/undo.png \
 		../SequenceGame/Buttons/3_players_hover.png \
 		../SequenceGame/Buttons/undo_hover.png \
+		../SequenceGame/Buttons/continue.png \
 		../SequenceGame/Buttons/2_players_hover.png \
+		../SequenceGame/Buttons/newgame_hover.png \
+		../SequenceGame/Buttons/restart_hover.png \
+		../SequenceGame/Buttons/exit_hover.png \
+		../SequenceGame/Buttons/continue_hover.png \
 		../SequenceGame/Buttons/start.png \
 		../SequenceGame/Buttons/next_hover.png \
 		../SequenceGame/Buttons/start_hover.png \
+		../SequenceGame/Buttons/exit.png \
+		../SequenceGame/Buttons/restart.png \
 		../SequenceGame/Buttons/back_hover.png \
 		../SequenceGame/Buttons/random_hover.png \
 		../SequenceGame/Buttons/redo_hover.png \
@@ -226,10 +234,75 @@ release/qrc_resources.cpp: ../SequenceGame/resources.qrc \
 		../SequenceGame/Images/main.jpg \
 		../SequenceGame/Images/background.jpg \
 		../SequenceGame/Images/select_player.jpg \
-		../SequenceGame/Tokens/dog_2.png \
-		../SequenceGame/Tokens/dog_1.png \
+		../SequenceGame/Tokens/dog_21.png \
+		../SequenceGame/Tokens/dog_68.png \
+		../SequenceGame/Tokens/dog_36.png \
+		../SequenceGame/Tokens/dog_42.png \
+		../SequenceGame/Tokens/dog_10.png \
+		../SequenceGame/Tokens/dog_9.png \
+		../SequenceGame/Tokens/dog_57.png \
+		../SequenceGame/Tokens/dog_19.png \
+		../SequenceGame/Tokens/dog_63.png \
+		../SequenceGame/Tokens/dog_25.png \
+		../SequenceGame/Tokens/dog_31.png \
+		../SequenceGame/Tokens/dog_46.png \
 		../SequenceGame/Tokens/dog_4.png \
-		../SequenceGame/Tokens/dog_3.png
+		../SequenceGame/Tokens/dog_52.png \
+		../SequenceGame/Tokens/dog_14.png \
+		../SequenceGame/Tokens/dog_67.png \
+		../SequenceGame/Tokens/dog_20.png \
+		../SequenceGame/Tokens/dog_29.png \
+		../SequenceGame/Tokens/dog_35.png \
+		../SequenceGame/Tokens/dog_41.png \
+		../SequenceGame/Tokens/dog_8.png \
+		../SequenceGame/Tokens/dog_56.png \
+		../SequenceGame/Tokens/dog_18.png \
+		../SequenceGame/Tokens/dog_62.png \
+		../SequenceGame/Tokens/dog_24.png \
+		../SequenceGame/Tokens/dog_30.png \
+		../SequenceGame/Tokens/dog_39.png \
+		../SequenceGame/Tokens/dog_45.png \
+		../SequenceGame/Tokens/dog_3.png \
+		../SequenceGame/Tokens/dog_51.png \
+		../SequenceGame/Tokens/dog_13.png \
+		../SequenceGame/Tokens/dog_66.png \
+		../SequenceGame/Tokens/dog_28.png \
+		../SequenceGame/Tokens/dog_34.png \
+		../SequenceGame/Tokens/dog_40.png \
+		../SequenceGame/Tokens/dog_49.png \
+		../SequenceGame/Tokens/dog_7.png \
+		../SequenceGame/Tokens/dog_55.png \
+		../SequenceGame/Tokens/dog_17.png \
+		../SequenceGame/Tokens/dog_61.png \
+		../SequenceGame/Tokens/dog_23.png \
+		../SequenceGame/Tokens/dog_38.png \
+		../SequenceGame/Tokens/dog_44.png \
+		../SequenceGame/Tokens/dog_2.png \
+		../SequenceGame/Tokens/dog_50.png \
+		../SequenceGame/Tokens/dog_59.png \
+		../SequenceGame/Tokens/dog_12.png \
+		../SequenceGame/Tokens/dog_65.png \
+		../SequenceGame/Tokens/dog_27.png \
+		../SequenceGame/Tokens/dog_33.png \
+		../SequenceGame/Tokens/dog_48.png \
+		../SequenceGame/Tokens/dog_6.png \
+		../SequenceGame/Tokens/dog_54.png \
+		../SequenceGame/Tokens/dog_16.png \
+		../SequenceGame/Tokens/dog_60.png \
+		../SequenceGame/Tokens/dog_22.png \
+		../SequenceGame/Tokens/dog_69.png \
+		../SequenceGame/Tokens/dog_37.png \
+		../SequenceGame/Tokens/dog_43.png \
+		../SequenceGame/Tokens/dog_1.png \
+		../SequenceGame/Tokens/dog_58.png \
+		../SequenceGame/Tokens/dog_11.png \
+		../SequenceGame/Tokens/dog_64.png \
+		../SequenceGame/Tokens/dog_26.png \
+		../SequenceGame/Tokens/dog_32.png \
+		../SequenceGame/Tokens/dog_47.png \
+		../SequenceGame/Tokens/dog_5.png \
+		../SequenceGame/Tokens/dog_53.png \
+		../SequenceGame/Tokens/dog_15.png
 	C:\Qt\5.7\mingw53_32\bin\rcc.exe -name resources ..\SequenceGame\resources.qrc -o release\qrc_resources.cpp
 
 compiler_moc_header_make_all: release/moc_BoardCard.cpp release/moc_Button.cpp release/moc_Game.cpp release/moc_Token.cpp
@@ -427,30 +500,33 @@ release/moc_Button.cpp: ../SequenceGame/Game.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurl.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfile.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpainter.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpen.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsscene.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsScene \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsTextItem \
@@ -565,32 +641,36 @@ release/moc_Game.cpp: ../SequenceGame/CircleListPlayers.h \
 		../SequenceGame/Game.h \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurl.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfile.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpainter.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpen.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsscene.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsScene \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsTextItem \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QSignalMapper \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qsignalmapper.h \
@@ -598,7 +678,6 @@ release/moc_Game.cpp: ../SequenceGame/CircleListPlayers.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qlineedit.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		../SequenceGame/Game.h \
 		C:/Qt/5.7/mingw53_32/bin/moc.exe
 	C:\Qt\5.7\mingw53_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.7/mingw53_32/mkspecs/win32-g++ -IC:/Users/Jhordan/Documents/GitHub/SequenceGame/Qt/SequenceGame -IC:/Qt/5.7/mingw53_32/include -IC:/Qt/5.7/mingw53_32/include/QtWidgets -IC:/Qt/5.7/mingw53_32/include/QtGui -IC:/Qt/5.7/mingw53_32/include/QtANGLE -IC:/Qt/5.7/mingw53_32/include/QtCore -I. -IC:/Qt/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IC:/Qt/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IC:/Qt/Tools/mingw530_32/i686-w64-mingw32/include -IC:/Qt/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IC:/Qt/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\SequenceGame\Game.h -o release\moc_Game.cpp
@@ -830,6 +909,9 @@ release/main.o: ../SequenceGame/main.cpp C:/Qt/5.7/mingw53_32/include/QtWidgets/
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
@@ -952,30 +1034,33 @@ release/BoardCard.o: ../SequenceGame/BoardCard.cpp ../SequenceGame/BoardCard.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurl.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfile.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpainter.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpen.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsscene.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsScene \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsTextItem \
@@ -1088,40 +1173,43 @@ release/Button.o: ../SequenceGame/Button.cpp ../SequenceGame/Button.h \
 		../SequenceGame/ArrayBoard.h \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurl.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfile.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpainter.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpen.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsscene.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsScene \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsTextItem \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QSignalMapper \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qsignalmapper.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QLineEdit \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qlineedit.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem
+		C:/Qt/5.7/mingw53_32/include/QtGui/qtextformat.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\Button.o ..\SequenceGame\Button.cpp
 
 release/CircleListPlayers.o: ../SequenceGame/CircleListPlayers.cpp ../SequenceGame/CircleListPlayers.h \
@@ -1322,30 +1410,33 @@ release/DeckCard.o: ../SequenceGame/DeckCard.cpp ../SequenceGame/DeckCard.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurl.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfile.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpainter.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpen.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsscene.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsScene \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsTextItem \
@@ -1459,30 +1550,33 @@ release/Game.o: ../SequenceGame/Game.cpp ../SequenceGame/Game.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsRectItem \
 		../SequenceGame/Board.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/qevent.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurl.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfile.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.7/mingw53_32/include/QtGui/QMouseEvent \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsView \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsview.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpainter.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.7/mingw53_32/include/QtGui/qpen.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontinfo.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfont.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qpalette.h \
-		C:/Qt/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
-		C:/Qt/5.7/mingw53_32/include/QtGui/qcursor.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/qgraphicsscene.h \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsScene \
 		C:/Qt/5.7/mingw53_32/include/QtWidgets/QGraphicsTextItem \

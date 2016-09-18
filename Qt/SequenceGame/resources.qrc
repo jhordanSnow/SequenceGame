@@ -74,6 +74,14 @@
         <file>Buttons/undo_hover.png</file>
         <file>Buttons/random.png</file>
         <file>Buttons/random_hover.png</file>
+        <file>Buttons/exit.png</file>
+        <file>Buttons/newgame.png</file>
+        <file>Buttons/restart.png</file>
+        <file>Buttons/continue_hover.png</file>
+        <file>Buttons/newgame_hover.png</file>
+        <file>Buttons/restart_hover.png</file>
+        <file>Buttons/exit_hover.png</file>
+        <file>Buttons/continue.png</file>
     </qresource>
     <qresource prefix="/Images">
         <file>Images/main.jpg</file>
@@ -85,5 +93,70 @@
         <file>Tokens/dog_2.png</file>
         <file>Tokens/dog_3.png</file>
         <file>Tokens/dog_4.png</file>
+        <file>Tokens/dog_5.png</file>
+        <file>Tokens/dog_6.png</file>
+        <file>Tokens/dog_7.png</file>
+        <file>Tokens/dog_8.png</file>
+        <file>Tokens/dog_9.png</file>
+        <file>Tokens/dog_10.png</file>
+        <file>Tokens/dog_11.png</file>
+        <file>Tokens/dog_12.png</file>
+        <file>Tokens/dog_13.png</file>
+        <file>Tokens/dog_14.png</file>
+        <file>Tokens/dog_15.png</file>
+        <file>Tokens/dog_16.png</file>
+        <file>Tokens/dog_17.png</file>
+        <file>Tokens/dog_18.png</file>
+        <file>Tokens/dog_19.png</file>
+        <file>Tokens/dog_20.png</file>
+        <file>Tokens/dog_21.png</file>
+        <file>Tokens/dog_22.png</file>
+        <file>Tokens/dog_23.png</file>
+        <file>Tokens/dog_24.png</file>
+        <file>Tokens/dog_25.png</file>
+        <file>Tokens/dog_26.png</file>
+        <file>Tokens/dog_27.png</file>
+        <file>Tokens/dog_28.png</file>
+        <file>Tokens/dog_29.png</file>
+        <file>Tokens/dog_30.png</file>
+        <file>Tokens/dog_31.png</file>
+        <file>Tokens/dog_32.png</file>
+        <file>Tokens/dog_33.png</file>
+        <file>Tokens/dog_34.png</file>
+        <file>Tokens/dog_35.png</file>
+        <file>Tokens/dog_36.png</file>
+        <file>Tokens/dog_37.png</file>
+        <file>Tokens/dog_38.png</file>
+        <file>Tokens/dog_39.png</file>
+        <file>Tokens/dog_40.png</file>
+        <file>Tokens/dog_41.png</file>
+        <file>Tokens/dog_42.png</file>
+        <file>Tokens/dog_43.png</file>
+        <file>Tokens/dog_44.png</file>
+        <file>Tokens/dog_45.png</file>
+        <file>Tokens/dog_46.png</file>
+        <file>Tokens/dog_47.png</file>
+        <file>Tokens/dog_48.png</file>
+        <file>Tokens/dog_49.png</file>
+        <file>Tokens/dog_50.png</file>
+        <file>Tokens/dog_51.png</file>
+        <file>Tokens/dog_52.png</file>
+        <file>Tokens/dog_53.png</file>
+        <file>Tokens/dog_54.png</file>
+        <file>Tokens/dog_55.png</file>
+        <file>Tokens/dog_56.png</file>
+        <file>Tokens/dog_57.png</file>
+        <file>Tokens/dog_58.png</file>
+        <file>Tokens/dog_59.png</file>
+        <file>Tokens/dog_60.png</file>
+        <file>Tokens/dog_61.png</file>
+        <file>Tokens/dog_62.png</file>
+        <file>Tokens/dog_63.png</file>
+        <file>Tokens/dog_64.png</file>
+        <file>Tokens/dog_65.png</file>
+        <file>Tokens/dog_66.png</file>
+        <file>Tokens/dog_67.png</file>
+        <file>Tokens/dog_68.png</file>
+        <file>Tokens/dog_69.png</file>
     </qresource>
 </RCC>

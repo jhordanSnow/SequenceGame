@@ -4,12 +4,13 @@
 #include "Play.h"
 #include "Player.h"
 #include "DeckCard.h"
+#include "ArrayBoard.h"
 
 class UndoStack{
 public:
     UndoStack();
     Play *topPlay();
-    void push(int playId, int round, DeckCard *drawedCard, DeckCard* playedCard, BoardCard* tableCard, Player* playerTurn, Player* lastOwner = NULL);
+    void push(int playId, int round, DeckCard *drawedCard, DeckCard* playedCard, BoardCard* tableCard, Player* playerTurn, ArrayBoard *winnerTokens = NULL,Player* lastOwner = NULL);
     Play* pop();
 
     void toString();

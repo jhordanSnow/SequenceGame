@@ -41,8 +41,8 @@ void ArrayStackDeck::fillDeck(){
     for (int i = 0; i < maxSize; i++){
         int indiceCard = (i % maxCards) + 1;
         //pushCard(new DeckCard(indiceCard));
-        (i%2 == 0) ? pushCard(new DeckCard(51)) : pushCard(new DeckCard(50));
-        //pushCard(new DeckCard(51));
+        //(i%2 == 0) ? pushCard(new DeckCard(51)) : pushCard(new DeckCard(50));
+        pushCard(new DeckCard(51));
     }
 }
 

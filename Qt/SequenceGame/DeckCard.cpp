@@ -28,6 +28,8 @@ void DeckCard::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
 }
 
 void DeckCard::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    sequence->setSelectedCard(this);
+    if (event->button() == Qt::LeftButton){
+        sequence->setSelectedCard(this);
+    }
 }
 

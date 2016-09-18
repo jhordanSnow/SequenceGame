@@ -4,6 +4,10 @@
 #define GAME_FONT_SIZE 25
 const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 
+Button* restartGame;
+Button* exitGame;
+Button* newGame;
+
 #define WINNER_ROW 5
 
 #define WINDOW_WIDTH 1200
@@ -26,12 +30,13 @@ const QFont gameFont("SansSerif",GAME_FONT_SIZE);
 #define ID_JOKER_1 50
 #define ID_JOKER_2 52
 
-#define maxToken 4
+#define maxToken 68
 
 #define MAX_WINS 2
 
 Game::Game(){
     tokenId = 1;
+    endGame = false;
     /*
     ** Inicializamos la pantalla
     */
@@ -44,7 +49,8 @@ Game::Game(){
     this->scene = new QGraphicsScene();
     scene->setSceneRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT); // Tamaño de la escena
     setScene(this->scene); // Añadimos la escena
-
+    this->winnerScene = NULL;
+    scene->addItem(winnerScene);
     /*
     ** Inicializamos la lista de los jugadores
     */
@@ -263,6 +269,7 @@ void Game::getPlayer(int playerId, bool error){
         */
         if (playerId == 0) {
             connect(back, SIGNAL(clicked()), this, SLOT(selectPlayer()));
+            scene->addItem(back);
         }else{
             connect (back, SIGNAL(clicked()), signalMapper, SLOT(map()));
             signalMapper -> setMapping (back, previousPlayer);
@@ -270,7 +277,6 @@ void Game::getPlayer(int playerId, bool error){
 
         }
 
-        scene->addItem(back);
 
         /*
         ** Botón al siguiente jugador, donde guarda la información de este
@@ -299,7 +305,9 @@ void Game::addPlayer(int playerId){
     ** vamos a la ventana inicial del juego, de lo contrario lo llevamos
     ** a la creación del siguiente jugador
     */
-    if (playerId == numberPlayers){
+    if (playerId == numberPlayers && endGame){
+        resetGame();
+    }else if (playerId == numberPlayers){
         startGame();
     }else{
         getPlayer(playerId);
@@ -340,7 +348,6 @@ void Game::showRound(Player* player){
     playerToken = player->getPlayerToken();
     playerToken->setPos(60,150);
     scene->addItem(playerToken);
-    //qDebug() << tokenTemp->getTokenId();
 
     roundLabel = new QGraphicsTextItem("Round #" + QString::number(round + 1)); // Creamos el label del jugador
     roundLabel->setFont(gameFont); // Seteamos el estilo del titulo
@@ -407,16 +414,16 @@ void Game::checkCards(BoardCard *boardCard, bool isRedo){
         selectedHandCard = NULL;
 
         turnPlayer->drawCard(drawedCard);
-
-        undoPile->push(1, round, drawedCard, playedCard, boardCard, turnPlayer);
-
-        round++;
-
+        winnerTokens = new ArrayBoard(5,5);
         checkWinner(boardCard);
+        undoPile->push(1, round, drawedCard, playedCard, boardCard, turnPlayer, winnerTokens);
         if (!isRedo){
             redoPile = new UndoStack();
         }
-        startRounds();
+        round++;
+        if (!endGame){
+            startRounds();
+        }
     }else if (handCardId == ID_JOKER_1 || handCardId == ID_JOKER_2){
         if (boardCard->getHasOwner() && boardCard->getOwner() != players->getPlayer()){
             discardCards->pushCard(selectedHandCard);
@@ -437,7 +444,7 @@ void Game::checkCards(BoardCard *boardCard, bool isRedo){
 
             players->getPlayer()->drawCard(drawedCard);
 
-            undoPile->push(2, round, drawedCard, playedCard, boardCard, turnPlayer, lastOwner);
+            undoPile->push(2, round, drawedCard, playedCard, boardCard, turnPlayer, winnerTokens,lastOwner);
 
             round++;
 
@@ -460,34 +467,55 @@ void Game::checkWinner(BoardCard* boardCard){
     winnerTokens = new ArrayBoard(5,5);
     usedToken = false;
     winnerTokens->appendCard(boardCard);
+
     int horizontalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 0,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 0,matrixRows, matrixCols, boardCard, 0);
     if (horizontalTokens >= WINNER_ROW){
+
         winnerPlayer = players->getPlayer();
+        endGame = true;
         winnerOptions();
+
     }else{
+
         winnerTokens = new ArrayBoard(5,5);
         usedToken = false;
         winnerTokens->appendCard(boardCard);
+
         int verticalTokens = 1 + recursiveSearch(posMatrixX, posMatrixY, 0, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, 0, -1,matrixRows, matrixCols, boardCard, 0);
         if (verticalTokens >= WINNER_ROW){
+
             winnerPlayer = players->getPlayer();
+            endGame = true;
             winnerOptions();
+
         }else{
+
             winnerTokens = new ArrayBoard(5,5);
             usedToken = false;
             winnerTokens->appendCard(boardCard);
+
             int diagonalDown = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, 1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, -1,matrixRows, matrixCols, boardCard, 0);
             if (diagonalDown >= WINNER_ROW){
+
                 winnerPlayer = players->getPlayer();
+                endGame = true;
                 winnerOptions();
+
             }else{
+
                 winnerTokens = new ArrayBoard(5,5);
                 usedToken = false;
                 winnerTokens->appendCard(boardCard);
+
                 int diagonalUp = 1 + recursiveSearch(posMatrixX, posMatrixY, 1, -1,matrixRows, matrixCols, boardCard, 0) + recursiveSearch(posMatrixX, posMatrixY, -1, 1,matrixRows, matrixCols, boardCard, 0);
                 if (diagonalUp >= WINNER_ROW){
+
                     winnerPlayer = players->getPlayer();
+                    endGame = true;
                     winnerOptions();
+
+                }else{
+                    winnerTokens = new ArrayBoard(5,5);
                 }
             }
         }
@@ -496,15 +524,14 @@ void Game::checkWinner(BoardCard* boardCard){
 
 void Game::winnerOptions(){
     winnerPlayer->setWins(winnerPlayer->getWins() + 1);
-    undoPile->push(3, round, NULL, NULL, NULL, NULL);
     if (numberPlayers == MAX_WINS){
         if (winnerPlayer->getWins() == MAX_WINS){
-            winnerMenu();
+            winnerMenu(true);
         }else{
-            resetGame();
+            winnerMenu();
         }
     }else{
-        winnerMenu();
+        winnerMenu(true);
     }
 }
 
@@ -516,8 +543,6 @@ void Game::changeDiscardImage(BoardCard *boardCard){
         discardImage->setScale(false);
         scene->addItem(discardImage);
     }
-
-
 }
 
 int Game::recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int cRows, int cCols, BoardCard* boardCard, int tokens){
@@ -530,22 +555,30 @@ int Game::recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int 
     }
     BoardCard* nextCard = tableBoard->getCard(newPosX, newPosY);
     if (nextCard->getOwner() == boardCard->getOwner()){
+
+        qDebug() << "Card: "<< nextCard->getValue();
+        qDebug() << "Used: "<< usedToken;
+        qDebug() << "Prev: "<< nextCard->getTokenCard()->getPreviousRound();
+
+
         try{
             winnerTokens->appendCard(nextCard);
         }catch(std::runtime_error e){}
 
-        if (boardCard->getTokenCard()->getPreviousRound() && !usedToken){
+        if (usedToken && nextCard->getTokenCard()->getPreviousRound()){
+            return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens);
+        }
+        if (nextCard->getTokenCard()->getPreviousRound() && !usedToken){
             usedToken = true;
             return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens + 1);
         }
-        if (usedToken && boardCard->getTokenCard()->getPreviousRound()){
-            return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens);
+        if (!nextCard->getTokenCard()->getPreviousRound()){
+            return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens + 1);
         }
-        return recursiveSearch(newPosX,newPosY,moveX,moveY,cRows,cCols,nextCard,tokens + 1);
 
     }
-    if ((newPosX == 0 && newPosY == 0) || (newPosX == 9 && newPosY == 9) ||
-        (newPosX == 9 && newPosY == 0) || (newPosX == 0 && newPosY == 9)){
+    if (((newPosX == 0 && newPosY == 0) || (newPosX == 9 && newPosY == 9) ||
+        (newPosX == 9 && newPosY == 0) || (newPosX == 0 && newPosY == 9)) && !usedToken){
         return tokens + 1;
     }
     return tokens;
@@ -564,13 +597,20 @@ void Game::reloadBoard(){
     }
 }
 
+void Game::defaultSelectedCard(){
+    if (selectedHandCard != NULL){
+        selectedHandCard->setZValue(0);
+        selectedHandCard->defaultPos();
+        selectedHandCard->reloadCard();
+    }
+}
 
 void Game::setSelectedCard(DeckCard* handCard){
+    defaultSelectedCard();
     this->selectedHandCard = handCard;
 }
 
 void Game::mouseMoveEvent(QMouseEvent* event){
-    //qDebug() << event->pos();
     if (selectedHandCard != NULL){
         selectedHandCard->setSize(40);
         selectedHandCard->setPos(event->pos().x() + 15, event->pos().y() + 15);
@@ -613,50 +653,86 @@ void Game::discardHands(){
     }
 }
 
-void Game::resetGame(){
+void Game::resetContinueGame(){
+    scene->removeItem(winnerScene);
+    scene->removeItem(playerToken);
+    scene->removeItem(roundLabel);
+    scene->removeItem(playerNameLabel);
+
     if (winnerPlayer != NULL){
+        scene->removeItem(restartGame);
+
         cleanRound(winnerPlayer);
 
         for(int i = 0; i < winnerTokens->getCurrentCardSize(); i++){
             winnerTokens->getCard(i)->getTokenCard()->setPreviousRound(true);
         }
-
-        tableBoard->resetBoard(winnerTokens, oldWinnerTokens);
         oldWinnerTokens = winnerTokens;
 
+        winnerTokens = new ArrayBoard(5,5);
+        endGame = false;
+        startRounds();
+    }
+}
+
+void Game::resetGame(){
+    scene->removeItem(winnerScene);
+    scene->removeItem(playerToken);
+    scene->removeItem(roundLabel);
+    scene->removeItem(playerNameLabel);
+
+    if (winnerPlayer != NULL){
+        scene->removeItem(exitGame);
+        scene->removeItem(newGame);
+        scene->removeItem(restartGame);
+
+        cleanRound(winnerPlayer);
+
+        tableBoard->resetBoard(NULL,NULL);
+
+
+        deck = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
+        deck->fillDeck();
+
+        discardHands();
+
+        discardCards = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
+
+        undoPile = new UndoStack();
+        redoPile = new UndoStack();
+
+        roundLabel = NULL;
+
+        selectedHandCard = NULL;
+
+        winnerPlayer = NULL;
+        oldWinnerTokens = NULL;
+        usedToken = false;
+
+        endGame = false;
         winnerTokens = new ArrayBoard(5,5);
 
         round = 0;
 
-        undoPile = new UndoStack();
+        players->goToStart();
 
-        ArrayStackDeck* newDeck = new ArrayStackDeck(MAX_DECK_CARDS * MAX_DECKS,MAX_DECK_CARDS);
-        newDeck->fillDeck2();
-        newDeck->shuffleDeck();
-
-        deck->setMaxSize(deck->getMaxSize() + (MAX_DECK_CARDS * MAX_DECKS));
-        deck->reFillDeck((MAX_DECK_CARDS * MAX_DECKS), newDeck);
+        for (int i = 0; i < players->getCurrentSize(); i++){
+            players->getPlayer()->setWins(0);
+            players->nextPlayer();
+        }
 
         int maxHandCards = (this->numberPlayers == 4) ? 6 : 7;
-
-        discardHands();
-
         fillPlayersHand(maxHandCards);
 
+        players->goToStart();
+        startRounds();
     }
-}
-
-void Game::winnerMenu(){
-    scene->clear();
-    //cleanRound(winnerPlayer);
-    qDebug() << winnerPlayer->getName() + " Ha sido el ganador";
 }
 
 void Game::undoFunction(){
     if (undoPile->getSize() > 0){
         Play* lastPlay = undoPile->pop();
-    //QEvent::MouseButtonPress, 0, Qt::MouseButton::RightButton, Qt::MouseButton::RightButton, Qt::KeyboardModifier::NoModifier )
-        //QGraphicsView::mouseDoubleClickEvent(QMouseEvent(QEvent::MouseButtonDblClick, 0, Qt::RightButton, Qt::RightButton, Qt::NoModifier));
+        defaultSelectedCard();
         selectedHandCard = NULL;
 
         cleanRound(players->getPlayer());
@@ -668,6 +744,27 @@ void Game::undoFunction(){
         deck->pushCard(playerTurn->getHand()->removeCard(lastPlay->getDrawedCard()));
 
         if (lastPlay->getPlayId() == 1){
+
+            if (lastPlay->getWinnerTokens()->getCurrentCardSize() > 0){
+                playerTurn->setWins(playerTurn->getWins()-1);
+
+                scene->removeItem(winnerScene);
+                scene->removeItem(playerToken);
+                scene->removeItem(roundLabel);
+                scene->removeItem(playerNameLabel);
+
+                scene->removeItem(exitGame);
+                scene->removeItem(newGame);
+                scene->removeItem(restartGame);
+
+                winnerPlayer = NULL;
+
+                endGame = false;
+
+                for(int i = 0; i < lastPlay->getWinnerTokens()->getCurrentCardSize(); i++){
+                    lastPlay->getWinnerTokens()->getCard(i)->getTokenCard()->setPreviousRound(false);
+                }
+            }
 
             tableCard->setOwner(NULL);
             tableCard->reloadCard();
@@ -685,7 +782,7 @@ void Game::undoFunction(){
 
         changeDiscardImage(discardCards->topCard());
 
-        redoPile->push(lastPlay->getPlayId(),round, lastPlay->getDrawedCard(),lastPlay->getPlayedCard(),lastPlay->getTableCard(),playerTurn,lastPlay->getLastOwner());
+        redoPile->push(lastPlay->getPlayId(),round, lastPlay->getDrawedCard(),lastPlay->getPlayedCard(),lastPlay->getTableCard(),playerTurn, lastPlay->getWinnerTokens() ,lastPlay->getLastOwner());
 
         round = lastPlay->getRound();
         showRound(playerTurn);
@@ -693,12 +790,86 @@ void Game::undoFunction(){
 }
 
 void Game::redoFunction(){
+    // Error en el redo
     if (redoPile->getSize() > 0){
         Play* lastPlay = redoPile->pop();
 
         selectedHandCard = lastPlay->getPlayedCard();
-        checkCards(lastPlay->getTableCard(), true);
-
         round = lastPlay->getRound();
+        checkCards(lastPlay->getTableCard(), true);
+    }
+}
+
+
+
+void Game::winnerMenu(bool winner){
+
+    cleanRound(winnerPlayer);
+
+    this->winnerScene = new QGraphicsRectItem();
+    winnerScene->setRect(0,WINDOW_HEIGHT/4,WINDOW_WIDTH,WINDOW_HEIGHT/2); // Tamaño de la escena
+    winnerScene->setBrush((QBrush(QImage(":/Images/Images/background.jpg")))); // Imagen de fondoe
+    winnerScene->setZValue(5);
+    scene->addItem(winnerScene);
+
+
+    playerToken = winnerPlayer->getPlayerToken();
+    playerToken->setPos(60,(WINDOW_HEIGHT/4)+40);
+    playerToken->setZValue(5);
+    scene->addItem(playerToken);
+
+    roundLabel = new QGraphicsTextItem("Is the Winner (u mad bro?)"); // Creamos el label del jugador
+    roundLabel->setFont(gameFont); // Seteamos el estilo del titulo
+    roundLabel->setPos(400,(WINDOW_HEIGHT/4)+150);
+    roundLabel->setZValue(5);
+    scene->addItem(roundLabel);
+
+    playerNameLabel = new QGraphicsTextItem(winnerPlayer->getName()); // Creamos el label del jugador
+    playerNameLabel->setFont(gameFont); // Seteamos el estilo del titulo
+    playerNameLabel->setPos(400,(WINDOW_HEIGHT/4)+100);
+    playerNameLabel->setZValue(5);
+    scene->addItem(playerNameLabel);
+    if (winner){
+        restartGame = new Button(QString("restart"));
+        restartGame->setPosition(900,(WINDOW_HEIGHT/4)+50);
+        connect(restartGame, SIGNAL(clicked()), this, SLOT(resetGame()));
+        restartGame->setZValue(5);
+        scene->addItem(restartGame);
+
+        newGame = new Button(QString("newgame"));
+        newGame->setPosition(900,(WINDOW_HEIGHT/4)+120);
+        connect(newGame, SIGNAL(clicked()), this, SLOT(newGameSlot()));
+        newGame->setZValue(5);
+        scene->addItem(newGame);
+
+        exitGame = new Button(QString("exit"));
+        exitGame->setPosition(900,(WINDOW_HEIGHT/4)+190);
+        connect(exitGame, SIGNAL(clicked()), this, SLOT(close()));
+        exitGame->setZValue(5);
+        scene->addItem(exitGame);
+    }else{
+
+        restartGame = new Button(QString("continue"));
+        restartGame->setPosition(900,(WINDOW_HEIGHT/2)-50);
+        connect(restartGame, SIGNAL(clicked()), this, SLOT(resetContinueGame()));
+        restartGame->setZValue(5);
+        scene->addItem(restartGame);
+    }
+}
+
+
+void Game::newGameSlot(){
+    scene->removeItem(winnerScene);
+    scene->removeItem(playerToken);
+    scene->removeItem(roundLabel);
+    scene->removeItem(playerNameLabel);
+
+    if (winnerPlayer != NULL){
+        scene->clear();
+        this->scene = new QGraphicsScene();
+        scene->setSceneRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT); // Tamaño de la escena
+        setScene(this->scene); // Añadimos la escena
+
+        selectPlayer();
     }
 }

@@ -81,7 +81,7 @@ OBJECTS       = release/main.o \
 		release/moc_Game.o \
 		release/moc_Token.o
 
-DIST          =  ..\SequenceGame\BoardCard.h \
+DIST          = myapp.rc ..\SequenceGame\BoardCard.h \
 		..\SequenceGame\Button.h \
 		..\SequenceGame\CircleListPlayers.h \
 		..\SequenceGame\DeckCard.h \
@@ -232,6 +232,7 @@ release/qrc_resources.cpp: ../SequenceGame/resources.qrc \
 		../SequenceGame/Buttons/4_players.png \
 		../SequenceGame/Buttons/3_players.png \
 		../SequenceGame/Images/main.jpg \
+		../SequenceGame/Images/logo.png \
 		../SequenceGame/Images/background.jpg \
 		../SequenceGame/Images/select_player.jpg \
 		../SequenceGame/Tokens/dog_21.png \
@@ -2133,7 +2134,8 @@ release/Play.o: ../SequenceGame/Play.cpp ../SequenceGame/Play.h \
 		../SequenceGame/Player.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QString \
 		../SequenceGame/ArrayCard.h \
-		../SequenceGame/Token.h
+		../SequenceGame/Token.h \
+		../SequenceGame/ArrayBoard.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\Play.o ..\SequenceGame\Play.cpp
 
 release/UndoStack.o: ../SequenceGame/UndoStack.cpp ../SequenceGame/UndoStack.h \
@@ -2229,7 +2231,8 @@ release/UndoStack.o: ../SequenceGame/UndoStack.cpp ../SequenceGame/UndoStack.h \
 		../SequenceGame/Player.h \
 		C:/Qt/5.7/mingw53_32/include/QtCore/QString \
 		../SequenceGame/ArrayCard.h \
-		../SequenceGame/Token.h
+		../SequenceGame/Token.h \
+		../SequenceGame/ArrayBoard.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\UndoStack.o ..\SequenceGame\UndoStack.cpp
 
 release/ArrayBoard.o: ../SequenceGame/ArrayBoard.cpp ../SequenceGame/ArrayBoard.h \

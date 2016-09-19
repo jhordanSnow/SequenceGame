@@ -25,8 +25,7 @@ void ArrayStackDeck::pushCard(DeckCard *card){
 
 void ArrayStackDeck::reFillDeck(int size, ArrayStackDeck* newDeck){
     for (int i = 0; i < newDeck->getMaxSize() - 1; i++){
-        //pushCard(newDeck->popCard());
-        pushCard(new DeckCard(51));
+        pushCard(newDeck->popCard());
     }
 }
 
@@ -40,9 +39,7 @@ void ArrayStackDeck::fillDeck2(){
 void ArrayStackDeck::fillDeck(){
     for (int i = 0; i < maxSize; i++){
         int indiceCard = (i % maxCards) + 1;
-        //pushCard(new DeckCard(indiceCard));
-        //(i%2 == 0) ? pushCard(new DeckCard(51)) : pushCard(new DeckCard(50));
-        pushCard(new DeckCard(51));
+        pushCard(new DeckCard(indiceCard));
     }
 }
 

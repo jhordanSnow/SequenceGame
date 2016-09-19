@@ -44,3 +44,6 @@ HEADERS  += \
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    myapp.rc

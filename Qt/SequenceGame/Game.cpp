@@ -555,12 +555,6 @@ int Game::recursiveSearch(int posCardX, int posCardY, int moveX, int moveY, int 
     }
     BoardCard* nextCard = tableBoard->getCard(newPosX, newPosY);
     if (nextCard->getOwner() == boardCard->getOwner()){
-
-        qDebug() << "Card: "<< nextCard->getValue();
-        qDebug() << "Used: "<< usedToken;
-        qDebug() << "Prev: "<< nextCard->getTokenCard()->getPreviousRound();
-
-
         try{
             winnerTokens->appendCard(nextCard);
         }catch(std::runtime_error e){}

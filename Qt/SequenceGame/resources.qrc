@@ -87,6 +87,7 @@
         <file>Images/main.jpg</file>
         <file>Images/select_player.jpg</file>
         <file>Images/background.jpg</file>
+        <file>Images/logo.png</file>
     </qresource>
     <qresource prefix="/Tokens">
         <file>Tokens/dog_1.png</file>
